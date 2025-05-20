@@ -1,5 +1,5 @@
 /**
- * Created by alone on 2017/5/15.
+ * Created by alone on 2025/4/15.
  */
 var pingguo = createObject(1, '苹果');
 var sanxing = createObject(2, '三星');
