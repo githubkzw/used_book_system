@@ -1,5 +1,5 @@
 /**
- * Created by 项目开发者 on 2025/5/9.
+ * Created by kzw on 2025/5/9.
  */
 $(function () {
     //1 注册时忘记密码
