@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by wsk1103 on 2017/5/11.
+ * Created by wsk1103 on 2025/4/11.
  */
 @Controller
 public class HomeController {
@@ -237,5 +237,16 @@ public class HomeController {
     //获得商品留言，10条
     private List<ShopContext> selectShopContextBySid(int sid, int start) {
         return shopContextService.findById(sid, (start - 1) * 10);
+    }
+
+    //进入产品介绍页面
+    @RequestMapping(value = "/product_intro.do")
+    public String productIntro(HttpServletRequest request, Model model) {
+        UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
+        if (StringUtils.getInstance().isNullOrEmpty(userInformation)) {
+            userInformation = new UserInformation();
+        }
+        model.addAttribute("userInformation", userInformation);
+        return "page/product_intro";
     }
 }

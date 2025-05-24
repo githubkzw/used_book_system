@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>产品介绍 - C2C二手交易平台</title>
+    <link rel="icon" href="/img/page_icon.png"/>
+    <link th:href="@{/css/home_page/home_page_circle.css}" rel="stylesheet"/>
+    <link th:href="@{/css/home_page/header_and_nav.css}" rel="stylesheet"/>
+    <link th:href="@{/css/home_page/bottom_ifon_and_feature.css}" rel="stylesheet"/>
+    <script th:src="@{/js/jquery-1.3.2.min.js}"></script>
+    <script th:src="@{/js/home/home_page_circle.js}"></script>
+    <script th:src="@{/js/home/header_model_js.js}"></script>
+
+    <style>
+        .main-content {
+            min-height: 65vh;
+            padding: 120px 0;
+        }
+        
+        .product-container {
+            width: 80%;
+            margin: 110px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .feature-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        
+        .feature-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #6f42c1;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .feature-item {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-item h3 {
+            color: #6f42c1;
+            margin-bottom: 10px;
+        }
+        
+        .feature-item p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, #6f42c1 0%, #8e44ad 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 40px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .stat-item h3 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .stat-item p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .intro-text {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .home_page_info {
+            width: 90%;
+            margin: 160px -20px;
+            background-color: white;
+            padding: 20px 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .home_page_info .bottom_info {
+            width: 40%;
+            box-sizing: border-box;
+        }
+
+        .home_page_info .bottom_info h2 {
+            text-align: left;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #6f42c1;
+        }
+
+        .home_page_info .bottom_info p {
+            text-align: left;
+            line-height: 1.6;
+            color: #666;
+            margin: 0;
+            font-size: 1em;
+        }
+
+        footer {
+            background-color: slateblue;
+            padding: 15px 0;
+            margin-top: 200px;
+        }
+
+        footer p {
+            text-align: center;
+            color: white;
+            font-size: 1.3em;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header th:include="header :: copy"></header>
+        <div th:include="short_nav_show :: short_nav_show" class="short_nav_show"></div>
+        <nav th:include="my_nav :: my_nav" class="my_nav"></nav>
+        <div th:include="personal_nav :: personal_nav" class="personal_nav"></div>
+        
+        <div class="main-content">
+            <div class="product-container">
+                <div class="intro-text">
+                    <h1 style="color: #6f42c1; margin-bottom: 20px;">C2C二手交易平台</h1>
+                    <p>打造校园二手交易生态圈，让闲置资源流转起来</p>
+                </div>
+                
+                <div class="feature-section">
+                    <h2>核心功能</h2>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <h3>便捷交易</h3>
+                            <p>简单的发布流程，快速匹配买卖双方，支持多种交易方式，让二手交易变得轻松自如。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>求购发布</h3>
+                            <p>独特的求购功能，让买家主动发布需求，卖家可以精准对接，提高交易效率。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>安全保障</h3>
+                            <p>实名认证、信用评级、交易担保等多重机制，为用户打造安全可靠的交易环境。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stats-section">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <h3>2000万+</h3>
+                            <p>注册用户</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>90万+</h3>
+                            <p>日活用户</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>10万+</h3>
+                            <p>合作伙伴</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>1亿+</h3>
+                            <p>日交易额</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-section">
+                    <h2>平台优势</h2>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <h3>校园专属</h3>
+                            <p>专注校园二手交易场景，了解学生需求，提供更贴心的服务。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>资源共享</h3>
+                            <p>促进校园内部资源高效流转，减少浪费，践行环保理念。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>社交互动</h3>
+                            <p>基于交易建立起的社交网络，让校园生活更加丰富多彩。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="home_page_info">
+            <div class="bottom_info">
+                <h2>关于我们</h2>
+                <p>该网站成立与2025年，是中南财经政法大学最大的校内二手交易网站。拥有2000万注册用户和10万注册企业和合作伙伴。日常在线活动用户约90万。交易金额最大可达1亿/日。</p>
+            </div>
+            <div class="bottom_info">
+                <h2>团队信息</h2>
+                <p>该网站由kzw、lb、hxh协力完成。有疑问可以发送问题至邮箱 chenhaojie11@2925.com</p>
+            </div>
+            <div class="bottom_info">
+                <h2>版权声明</h2>
+                <p>本网站社区发布的所有信息，都视为发布者同意本网站免费予以使用；同时本网站认为其发布的信息有侵权、违法等行为的，有权予以修改、删除或通知发布者予以纠正的权利，发布者不得阻止或拒绝。</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Copyright © 2025-2200.Company name All rights reserved.<a href="/"></a></p>
+        </footer>
+    </div>
+</body>
+</html> 
