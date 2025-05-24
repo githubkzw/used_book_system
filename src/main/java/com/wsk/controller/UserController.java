@@ -254,7 +254,8 @@ public class UserController {
                              @RequestParam(required = false) String realName,
                              @RequestParam(required = false) String clazz, @RequestParam String token,
                              @RequestParam(required = false) String sno, @RequestParam(required = false) String dormitory,
-                             @RequestParam(required = false) String gender) {
+                             @RequestParam(required = false) String gender,
+                             @RequestParam(required = false) String email) {
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
         Map<String, Integer> map = new HashMap<>();
         map.put("result", 0);
@@ -304,6 +305,12 @@ public class UserController {
             gender = StringUtils.getInstance().replaceBlank(gender);
             userInformation.setGender(gender);
         } else if (gender != null && gender.length() > 2) {
+            return map;
+        }
+        if (email != null && email.length() <= 25) {
+            email = StringUtils.getInstance().replaceBlank(email);
+            userInformation.setEmail(email);
+        } else if (email != null && email.length() > 2) {
             return map;
         }
         int result = userInformationService.updateByPrimaryKeySelective(userInformation);

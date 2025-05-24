@@ -26,6 +26,8 @@ public class UserInformation implements Serializable {
 
     private String avatar;
 
+    private String email;
+
     public Integer getId() {
         return id;
     }
@@ -112,5 +114,13 @@ public class UserInformation implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar == null ? null : avatar.trim();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
     }
 }

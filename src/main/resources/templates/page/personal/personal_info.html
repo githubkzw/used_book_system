@@ -43,8 +43,9 @@
             <h3>性别：<span class="sex_span" th:text="${userInformation.gender}">男</span></h3>
             <div class="info_content">
                 <div class="first_info sex_info">
-                    <span>性别：</span><input class="gender" type="radio" name="sex_choose" value="1" checked="checked"/>男
-                    <input class="gender" type="radio" name="sex_choose" value="2"/>女
+                    <span>性别：</span>
+                    <input class="gender" type="radio" name="sex_choose" value="1" th:checked="${userInformation.gender == '男'}"/>男
+                    <input class="gender" type="radio" name="sex_choose" value="2" th:checked="${userInformation.gender == '女'}"/>女
                 </div>
                 <button class="update_button">确认修改</button>
             </div>
@@ -64,7 +65,7 @@
                 </div>
                 <button class="update_button">确认修改</button>
             </div>
-            <h3>Email：<span class="email_span">&nbsp;</span></h3>
+            <h3>Email：<span class="email_span" th:text="${userInformation.email}">&nbsp;</span></h3>
             <div class="info_content">
                 <div class="first_info">
                     <span>Email：</span><input type="text" class="email"/>
