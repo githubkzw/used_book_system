@@ -1,14 +1,17 @@
 header {
-    width: 99%;
-    max-height: 80px;
+    width: 100%;
+    height: 80px;
     background-color: blueviolet;
-    box-shadow: 5px 5px 10px #888888;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     position: fixed;
-    margin-top: -10px;
-    display: block;
-    z-index: 30;
-    border-radius: 5px;
-    overflow: hidden;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 span.short_nav {
@@ -32,15 +35,17 @@ span.short_nav:hover, span.search_icon:hover,
 }
 
 header .home_icon {
-    width: 5%;
+    width: auto;
     height: 80%;
     font-size: 2em;
     padding: 1%;
     float: left;
-    margin-left: 7%;
+    margin-left: 2%;
     color: white;
     font-weight: 100;
     font-family: cursive;
+    display: flex;
+    align-items: center;
 }
 
 header .login_or_register_string {
@@ -115,121 +120,211 @@ header .user_icon {
 }
 nav.my_nav {
     background-color: white;
-    width: 98%;
-    height: 8%;
+    width: 100%;
+    height: auto;
     min-height: 70px;
-    display: inline;
-    position: absolute;
-    left: 1%;
-    top: 12%;
-    border-radius: 10px;
-    box-shadow: 5px 10px 6px rgba(0, 0, 0, 0.1);
-    z-index: 20;
+    position: fixed;
+    left: 0;
+    top: 80px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
 }
 
 nav.my_nav ul {
-    color: slateblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     list-style: none;
     padding: 0;
     margin: 0;
-    margin-left: 28%;
+    flex-wrap: wrap;
 }
 
 nav.my_nav ul li {
-    margin-top: 1.5%;
-    float: left;
-    margin-left: 3%;
-    padding-right: 3%;
-    border-right: 3px solid slateblue;
-    font-size: 1em;
+    margin: 0 25px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+    border-radius: 4px;
 }
-nav.my_nav ul li a{
+
+nav.my_nav ul li a {
     text-decoration: none;
-    font-size: 1em;
+    font-size: 1.1em;
     color: slateblue;
+    transition: all 0.3s ease;
 }
-nav.my_nav ul li:last-child {
-    border-right: none;
+
+nav.my_nav ul li:hover {
+    background-color: rgba(106, 90, 205, 0.1);
+}
+
+nav.my_nav ul li:hover a {
+    color: #4834d4;
+}
+
+@media screen and (max-width: 768px) {
+    nav.my_nav ul li {
+        margin: 5px 0;
+        padding: 8px 15px;
+        border-bottom: 1px solid rgba(106, 90, 205, 0.2);
+    }
+
+    nav.my_nav ul li:last-child {
+        border-bottom: none;
+    }
 }
 .short_nav_show {
-    width: 10%;
-    height: 39%;
+    width: 180px;
+    height: auto;
+    max-height: calc(100vh - 100px);
     position: fixed;
     border-radius: 10px;
-    z-index: 30;
+    z-index: 1100;
     background-color: white;
-    margin-top: 3.8%;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    top: 80px;
+    left: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     display: none;
+    overflow-y: auto;
 }
 
 .short_nav_show ul {
     list-style: none;
-    padding: 0;
+    padding: 12px;
     margin: 0;
-    font-size: 1.2em;
-    text-align: center;
-    margin-top: 10%;
 }
 
 .short_nav_show ul li {
-    margin-bottom: 10%;
-    margin-left: 5%;
-    margin-right: 5%;
-    border-radius: 5px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 8px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
 }
 
 .short_nav_show ul li:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
 }
+
 .short_nav_show ul li a {
     text-decoration: none;
-    color: rgba(0, 0, 0, 0.75);
+    color: #333;
+    display: block;
+    padding: 10px 15px;
     font-size: 1em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
 .short_nav_show ul li:hover {
-    cursor: pointer;
-    background-color: slateblue;
+    background-color: blueviolet;
+}
+
+.short_nav_show ul li:hover a {
+    color: white;
+}
+
+/* 添加滚动条样式 */
+.short_nav_show::-webkit-scrollbar {
+    width: 6px;
+}
+
+.short_nav_show::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.short_nav_show::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.short_nav_show::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+@media screen and (max-width: 768px) {
+    .short_nav_show {
+        width: 160px;
+        top: 60px;
+        left: 10px;
+    }
 }
 .personal_nav {
     position: fixed;
-    margin-left: 85%;
-    width: 10%;
-    /*height: 23%;*/
-    border-radius: 10px;
-    z-index: 30;
+    top: 80px;
+    right: 20px;
+    width: 200px;
     background-color: white;
-    margin-top: 3.8%;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
     display: none;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
 }
 .personal_nav ul {
     list-style: none;
-    padding: 0;
+    padding: 15px;
     margin: 0;
-    font-size: 1.2em;
-    text-align: center;
-    margin-top: 10%;
+    font-size: 1.1em;
 }
 .personal_nav ul li {
-    margin-bottom: 10%;
-    margin-left: 5%;
-    margin-right: 5%;
+    margin-bottom: 10px;
     border-radius: 5px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
 }
-
 .personal_nav ul li:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
 }
 .personal_nav ul li a {
+    display: block;
+    padding: 10px 15px;
     text-decoration: none;
-    color: rgba(0, 0, 0, 0.75);
-    font-size: 1em;
+    color: #333;
+    transition: all 0.3s ease;
 }
 .personal_nav ul li:hover {
-    cursor: pointer;
-    background-color: slateblue;
+    background-color: #f0f0f0;
+}
+.personal_nav ul li:hover a {
+    color: blueviolet;
+}
+@media screen and (max-width: 768px) {
+    header {
+        height: 60px;
+    }
+
+    nav.my_nav {
+        top: 60px;
+    }
+
+    nav.my_nav ul {
+        flex-direction: column;
+    }
+
+    nav.my_nav ul li {
+        margin: 5px 0;
+        border-right: none;
+        border-bottom: 1px solid slateblue;
+    }
+
+    .nav_search_input {
+        width: 150px;
+        margin-left: 10px;
+    }
+
+    header .user_icon {
+        margin-left: 10px;
+    }
+
+    .personal_nav {
+        top: 60px;
+        right: 10px;
+        width: 180px;
+    }
 }
 
