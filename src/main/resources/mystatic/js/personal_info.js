@@ -29,6 +29,14 @@ $(function() {
         console.error('Error initializing accordion:', e);
     }
 
+    // 实时监听输入框的变化
+    $('.first_info input').on('input propertychange change', function() {
+        var val = $(this).val();
+        if (val != undefined && val != '') {
+            $(this).siblings(".reqiure_enter").hide(0);
+        }
+    });
+
     // 使用事件委托来绑定点击事件
     $('#accordion').on('click', '.update_button', function(event) {
         event.preventDefault();
@@ -40,61 +48,105 @@ $(function() {
         var $container = $button.closest('.info_content');
         var $firstInfo = $container.find('.first_info');
         var $input = $firstInfo.find('input');
+        var token = $('.token').val();
+        var fieldType = '';
+        var value = '';
         
-        console.log('Input found:', $input.length > 0);
-        console.log('Input type:', $input.attr('type'));
-        
-        if ($input.attr('type') === 'radio') {
+        // 确定要更新的字段类型
+        if ($firstInfo.hasClass('sex_info')) {
+            fieldType = 'gender';
             var $checkedRadio = $firstInfo.find('input[name="sex_choose"]:checked');
             if (!$checkedRadio.length) {
                 alert('请选择性别');
                 return;
             }
+            value = $checkedRadio.val() === "1" ? "男" : "女";
+        } else {
+            // 处理其他字段
+            value = $input.val();
+            if (!value) {
+                alert('请输入内容');
+                return;
+            }
             
-            var value = $checkedRadio.val();
-            var genderText = value === "1" ? "男" : "女";
-            var token = $('.token').val();
-            
-            console.log('Preparing to send:', {
-                gender: genderText,
-                token: token
-            });
-            
-            $.ajax({
-                url: '/certification.do',
-                type: 'post',
-                dataType: 'JSON',
-                data: {
-                    gender: genderText,
-                    token: token
-                },
-                success: function(data) {
-                    console.log('Server response:', data);
-                    if (data.result === 1) {
-                        $container.prev().find('.sex_span').text(genderText);
-                        alert('更新成功');
-                    } else {
-                        alert('更新失败');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error details:', {
-                        status: status,
-                        error: error,
-                        response: xhr.responseText
-                    });
-                    alert('更新失败，请稍后重试');
+            // 根据输入框的class确定字段类型
+            if ($input.hasClass('userName')) {
+                fieldType = 'userName';
+            } else if ($input.hasClass('realName')) {
+                fieldType = 'realName';
+            } else if ($input.hasClass('sno')) {
+                fieldType = 'sno';
+            } else if ($input.hasClass('dormitory')) {
+                fieldType = 'dormitory';
+            } else if ($input.hasClass('email')) {
+                fieldType = 'email';
+                // 验证邮箱格式
+                if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+                    alert('请输入正确的邮箱格式');
+                    return;
                 }
-            });
+            }
         }
-    });
-
-    // 实时监听输入框的变化
-    $('.first_info input').on('input propertychange change', function() {
-        var val = $(this).val();
-        if (val != undefined && val != '') {
-            $(this).siblings(".reqiure_enter").hide(0);
-        }
+        
+        // 构建请求数据
+        var data = {
+            token: token
+        };
+        data[fieldType] = value;
+        
+        console.log('Sending data:', data);
+        
+        $.ajax({
+            url: '/certification.do',
+            type: 'post',
+            dataType: 'JSON',
+            data: data,
+            success: function(data) {
+                console.log('Server response:', data);
+                if (data.result === 1) {
+                    // 更新页面显示
+                    var $span;
+                    switch(fieldType) {
+                        case 'userName':
+                            $span = $('.username_span');
+                            break;
+                        case 'realName':
+                            $span = $('.realname_span');
+                            break;
+                        case 'gender':
+                            $span = $('.sex_span');
+                            break;
+                        case 'sno':
+                            $span = $('.sno_span');
+                            break;
+                        case 'dormitory':
+                            $span = $('.dormitory_span');
+                            break;
+                        case 'email':
+                            $span = $('.email_span');
+                            break;
+                    }
+                    if ($span) {
+                        $span.text(value);
+                    }
+                    alert('更新成功');
+                    // 清空输入框
+                    $input.val('');
+                    // 关闭当前面板
+                    $("#accordion").accordion("option", "active", false);
+                } else {
+                    alert('更新失败');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error details:', {
+                    status: status,
+                    error: error,
+                    response: xhr.responseText
+                });
+                alert('更新失败，请稍后重试');
+            }
+        });
     });
 
     // 检查提示信息
