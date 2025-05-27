@@ -2,38 +2,87 @@
  * Created by alone on 2017/5/11.
  */
 $(function () {
-    var time_out = setTimeout(moveToRight, 3500);
-    var isMove = false;
+    var time_out;
+    var isAnimating = false;
+    var isHovered = false;
+    var resumeTimeout;
+    
+    // 初始化自动滚动
+    function startAutoSlide() {
+        stopAutoSlide(); // 清除之前的定时器
+        if (!isHovered && !isAnimating) {
+            time_out = setTimeout(moveToRight, 3500);
+        }
+    }
+
+    // 停止自动滚动
+    function stopAutoSlide() {
+        clearTimeout(time_out);
+        clearTimeout(resumeTimeout);
+    }
+
+    // 延迟恢复自动滚动
+    function delayedStartAutoSlide() {
+        stopAutoSlide();
+        resumeTimeout = setTimeout(function() {
+            if (!isHovered) {
+                startAutoSlide();
+            }
+        }, 2000); // 2秒后恢复自动滚动
+    }
+
+    // 停止所有正在进行的动画
+    function stopAllAnimations() {
+        $('.current h1, .current p, .current .slide_img').stop(true, true);
+        $('.my_slide').stop(true, true);
+    }
+
+    // 鼠标悬停时暂停自动滚动
+    $('.my_slider').hover(
+        function() {
+            isHovered = true;
+            stopAutoSlide();
+        },
+        function() {
+            isHovered = false;
+            delayedStartAutoSlide();
+        }
+    );
+
     $('.right_turn').click(function () {
-        if (!isMove) {
-            clearTimeout(time_out);
-            isMove = true;
+        if (!isAnimating) {
+            stopAutoSlide();
+            stopAllAnimations();
+            isAnimating = true;
             moveToRight();
         }
     });
+
     $('.left_turn').click(function () {
-        if (!isMove) {
-            clearTimeout(time_out);
-            isMove = true;
+        if (!isAnimating) {
+            stopAutoSlide();
+            stopAllAnimations();
+            isAnimating = true;
             currentMoveToLeft();
         }
     });
+
     function moveToRight() {
-        clearTimeout(time_out);
+        stopAutoSlide();
         nextPrepare();
-        $('.current h1').animate({left: 250}, 300, function () {
-            $('.current p').animate({left: 250}, 300, function () {
-                $(this).animate({left: -200, opacity: 0}, 500, function () {
+        $('.current h1').animate({left: 250}, 200, function () {
+            $('.current p').animate({left: 250}, 200, function () {
+                $(this).animate({left: -200, opacity: 0}, 300, function () {
                     $(this).hide(0);
                 });
-                $('.current .slide_img').animate({left: "70%"}, 300, function () {
-                    $('.current .slide_img').animate({left: -200, opacity: 0}, 800, function () {
+                $('.current .slide_img').animate({left: "70%"}, 200, function () {
+                    $('.current .slide_img').animate({left: -200, opacity: 0}, 500, function () {
                         moveToNext();
                         $(this).hide(0);
                     });
                 })
             });
-            $('.current h1').animate({left: -200, opacity: 0}, 500, function () {
+            $('.current h1').animate({left: -200, opacity: 0}, 300, function () {
                 $(this).hide(0);
             });
         })
@@ -44,12 +93,12 @@ $(function () {
         if (temp.attr("class") != "my_slide") {
             temp = $('.my_slide:first');
         }
-        temp.css({left: "80%"}).show(0).animate({left: "10%", opacity: 1}, 1000, function () {
+        temp.css({left: "80%"}).show(0).animate({left: "10%", opacity: 1}, 600, function () {
             $('.current').hide(0);
             $('.current').removeClass("current");
             temp.addClass("current").css({"z-index": 0});
-            time_out = setTimeout(moveToRight, 3500);
-            isMove = false;
+            isAnimating = false;
+            delayedStartAutoSlide();
         });
     }
 
@@ -65,22 +114,22 @@ $(function () {
     }
 
     function currentMoveToLeft() {
-        clearTimeout(time_out);
+        stopAutoSlide();
         prevPrepare();
-        $('.current .slide_img').animate({left: "41%"}, 400, function () {
-            $('.current h1').animate({left: "15%"}, 400);
-            $('.current p').animate({left: "0%"}, 400, function () {
-                $('.current h1').animate({left: "5%"}, 600, function () {
-                    $(this).animate({left: "120%", opacity: 0}, 800, function () {
+        $('.current .slide_img').animate({left: "41%"}, 300, function () {
+            $('.current h1').animate({left: "15%"}, 300);
+            $('.current p').animate({left: "0%"}, 300, function () {
+                $('.current h1').animate({left: "5%"}, 400, function () {
+                    $(this).animate({left: "120%", opacity: 0}, 500, function () {
                         $(this).hide(0);
                     });
                 });
-                $(this).animate({left: "120%", opacity: 0}, 800, function () {
+                $(this).animate({left: "120%", opacity: 0}, 500, function () {
                     $(this).hide(0);
                     moveToPrev();
                 });
             });
-            $(this).animate({left: "120%", opacity: 0}, 800, function () {
+            $(this).animate({left: "120%", opacity: 0}, 500, function () {
                 $(this).hide(0);
             });
         });
@@ -102,14 +151,15 @@ $(function () {
         if (temp.attr("class") != 'my_slide') {
             temp = $('.my_slide:last');
         }
-        temp.css({left: "-70%"}).show(0).animate({left: "10%", opacity: 1}, 800, function () {
+        temp.css({left: "-70%"}).show(0).animate({left: "10%", opacity: 1}, 500, function () {
             $('.current').hide(0);
             $('.current').removeClass("current");
             temp.addClass("current").css({"z-index": 0});
-            time_out = setTimeout(moveToRight, 3500);
-            isMove = false;
+            isAnimating = false;
+            delayedStartAutoSlide();
         });
     }
+
     $('.buy').click(function () {
         var id = $(this).attr('value');
         $.ajax({
@@ -163,4 +213,7 @@ $(function () {
     //         websocket.send(phone);
     //     };
     // }
+
+    // 初始化自动滚动
+    startAutoSlide();
 });
