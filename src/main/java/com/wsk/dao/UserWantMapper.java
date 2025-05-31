@@ -26,4 +26,7 @@ public interface UserWantMapper {
     List<UserWant> selectMineByUid(int id);
 
     List<UserWant> selectAll();
+
+    @Select("select * from userwant where sort=#{sort} and display=1 order by id desc")
+    List<UserWant> selectBySort(int sort);
 }

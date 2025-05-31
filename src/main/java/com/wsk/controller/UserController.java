@@ -404,6 +404,7 @@ public class UserController {
         userWant.setRemark(remark);
         userWant.setUid((Integer) request.getSession().getAttribute("uid"));
         userWant.setSort(sort);
+        userWant.setDisplay(1);
         int result;
         try {
             result = userWantService.insertSelective(userWant);
@@ -494,6 +495,7 @@ public class UserController {
         return "redirect:my_require_product.do";
     }
 
+    //!!!目前前端不展示这个接口了
     //收藏
     //add the userCollection
     @RequestMapping(value = "/addUserCollection.do")
@@ -957,18 +959,63 @@ public class UserController {
 
 
     private String getSort(int sort) {
-        StringBuilder sb = new StringBuilder();
+        try {
+            log.info("开始获取分类信息，sort值为: {}", sort);
+            
         Specific specific = selectSpecificBySort(sort);
-        int cid = specific.getCid();
+            if (specific == null) {
+                log.warn("未找到sort值为{}的具体分类信息", sort);
+                return "未知分类";
+            }
+            
+            Integer cid = specific.getCid();
+            if (cid == null) {
+                log.warn("分类ID为null，sort值为: {}", sort);
+                return specific.getName() != null ? specific.getName() : "未知分类";
+            }
+            
         Classification classification = selectClassificationByCid(cid);
-        int aid = classification.getAid();
+            if (classification == null) {
+                log.warn("未找到cid为{}的分类信息", cid);
+                return specific.getName() != null ? specific.getName() : "未知分类";
+            }
+            
+            Integer aid = classification.getAid();
+            if (aid == null) {
+                log.warn("分类aid为null，cid值为: {}", cid);
+                return classification.getName() != null ? classification.getName() : "未知分类";
+            }
+            
         AllKinds allKinds = selectAllKindsByAid(aid);
+            if (allKinds == null) {
+                log.warn("未找到aid为{}的总分类信息", aid);
+                return classification.getName() != null ? classification.getName() : "未知分类";
+            }
+            
+            StringBuilder sb = new StringBuilder();
+            if (allKinds.getName() != null) {
         sb.append(allKinds.getName());
+            }
+            if (classification.getName() != null) {
+                if (sb.length() > 0) {
         sb.append("-");
+                }
         sb.append(classification.getName());
+            }
+            if (specific.getName() != null) {
+                if (sb.length() > 0) {
         sb.append("-");
+                }
         sb.append(specific.getName());
-        return sb.toString();
+            }
+            
+            String result = sb.length() > 0 ? sb.toString() : "未知分类";
+            log.info("获取分类信息成功，sort值: {}，结果: {}", sort, result);
+            return result;
+        } catch (Exception e) {
+            log.error("获取分类信息时发生错误，sort值: " + sort, e);
+            return "未知分类";
+        }
     }
 
     //查看用户收藏的货物的总数
@@ -1081,15 +1128,15 @@ public class UserController {
         }
     }
 
-    //查看订单总数
-    private int getOrderFormCounts(int uid) {
-        try {
-            return orderFormService.getCounts(uid);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
+//    //查看订单总数
+//    private int getOrderFormCounts(int uid) {
+//        try {
+//            return orderFormService.getCounts(uid);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return -1;
+//        }
+//    }
 
     //订单列表 10个
     private List<OrderForm> selectOrderFormByUid(int uid, int start) {
@@ -1103,17 +1150,17 @@ public class UserController {
         }
     }
 
-    //订单中的商品
-    private List<GoodsOfOrderForm> selectGoodsOfOrderFormByOFid(int ofid) {
-        try {
-            return goodsOfOrderFormService.selectByOFid(ofid);
-        } catch (Exception e) {
-            e.printStackTrace();
-            List<GoodsOfOrderForm> list = new ArrayList<>();
-            list.add(new GoodsOfOrderForm());
-            return list;
-        }
-    }
+//    //订单中的商品
+//    private List<GoodsOfOrderForm> selectGoodsOfOrderFormByOFid(int ofid) {
+//        try {
+//            return goodsOfOrderFormService.selectByOFid(ofid);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            List<GoodsOfOrderForm> list = new ArrayList<>();
+//            list.add(new GoodsOfOrderForm());
+//            return list;
+//        }
+//    }
 
     //查看用户的状态
     private UserState selectUserStateByUid(int uid) {

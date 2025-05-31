@@ -1,152 +1,241 @@
 /**
  * Created by alone on 2025/4/15.
  */
-var pingguo = createObject(1, '苹果');
-var sanxing = createObject(2, '三星');
-var xiaomi = createObject(3, '小米');
-var huawei = createObject(4, '华为');
-var zhongxing = createObject(5, '中兴');
-var lianxiang = createObject(6, '联想');
-var meizhu = createObject(7, '魅族');
-var qitas = createObject(8, '其他');
-var erjis = createObject(9, '耳机');
-var shouji = new Object();
-shouji.name = '手机';
-shouji.content = [pingguo, sanxing, xiaomi, huawei, zhongxing, lianxiang, meizhu, qitas, erjis];
-var putongxiangji = createObject(10, '普通相机');
-var danfan = createObject(11, '单反');
-var qitax = createObject(12, '其他');
-var content = [putongxiangji, danfan, qitax];
-var xiangji = createType('相机', content);
-var bijiben = createObject(13, '笔记本');
-var pingban = createObject(14, '平板电脑');
-var taishi = createObject(15, '台式电脑');
-var xianshiqi = createObject(16, '显示器');
-var shubiao = createObject(17, '鼠标');
-var yingpan = createObject(18, '硬盘');
-var upan = createObject(19, 'U盘');
-var yidongyingpan = createObject(20, '移动硬盘');
-var qitad = createObject(21, '其他');
-var content1 = [bijiben, pingban, taishi, xianshiqi, shubiao,
-    yingpan, upan, yidongyingpan, qitad];
-var diannao = createType('电脑', content1);
-var xiyiji = createObject(22, '洗衣机');
-var yinshuiji = createObject(23, '饮水机');
-var chuifengji = createObject(24, '吹风机');
-var tixudao = createObject(25, '剃须刀');
-var fengshan = createObject(26, '风扇');
-var zhudanqi = createObject(27, '煮蛋器');
-var diancilu = createObject(28, '电磁炉');
-var dianfanbao = createObject(29, '电饭煲');
-var qitaj = createObject(30, '其他');
-var content2 = [xiyiji, yinshuiji, chuifengji, tixudao,
-    fengshan, zhudanqi, diancilu, dianfanbao, qitaj];
-var jiadian = createType('家电', content2);
-var erjiy = createObject(31, '耳机');
-var yinxiang = createObject(32, '音响');
-var gongfang = createObject(33, '功放');
-var diyingpao = createObject(34, '低音炮');
-var maikefeng = createObject(35, '麦克风');
-var content3 = [erjiy, yinxiang, gongfang, diyingpao, maikefeng];
-var yingyin = createType('影音', content3);
-var shangyi = createObject(36, '上衣');
-var kuzi = createObject(37, '裤子');
-var qunzi = createObject(38, '裙子');
-var qitan = createObject(39, '其他');
-var content4 = [shangyi, kuzi, qunzi, qitan];
-var nvzhuang = createType('女装', content4);
-var shangyin = createObject(40, '上衣');
-var kuzin = createObject(41, '裤子');
-var qitanan = createObject(42, '其他');
-var content5 = [shangyin, kuzin, qitanan];
-var nanzhuang = createType('男装', content5);
-var yundongxie = createObject(43, '运动鞋');
-var pixie = createObject(44, '皮鞋');
-var fanbuxie = createObject(45, '帆布鞋');
-var qiuxie = createObject(46, '球鞋');
-var banxie = createObject(47, '板鞋');
-var qitaxie = createObject(48, '其他');
-var content6 = [yundongxie, pixie, fanbuxie, qiuxie, banxie, qitaxie];
-var nvxie = createType('女鞋', content6);
-var yundongxienan = createObject(49, '运动鞋');
-var pixienan = createObject(50, '皮鞋');
-var fanbuxienan = createObject(51, '帆布鞋');
-var qiuxienan = createObject(52, '球鞋');
-var banxienan = createObject(53, '板鞋');
-var qitaxienan = createObject(54, '其他');
-var content7 = [yundongxienan, pixienan, fanbuxienan, qiuxienan, banxienan, qitaxienan];
-var nanxie = createType('男鞋', content7);
-var beibao = createObject(55, '背包');
-var lvxingxiang = createObject(56, '旅行箱');
-var qitaxiang = createObject(57, '其他');
-var content8 = [beibao, lvxingxiang, qitaxiang];
-var xiangbao = createType('箱包', content8);
-var jixiebiao = createObject(58, '机械表');
-var shiyingbiao = createObject(59, '石英表');
-var dianzibiao = createObject(60, '电子表');
-var qitabiao = createObject(61, '其他');
-var content9 = [jixiebiao, shiyingbiao, dianzibiao, qitabiao];
-var shoubiao = createType('手表', content9);
-var zuqiu = createObject(62, '足球');
-var yumaoqiupai = createObject(63, '羽毛球拍');
-var wangqiupai = createObject(64, '网球拍');
-var lanqiu = createObject(65, '篮球');
-var lunhua = createObject(66, '轮滑');
-var bingbangqiupai = createObject(67, '乒乓球拍');
-var huaban = createObject(68, '滑板');
-var qitaqixie = createObject(69, '其他');
-var content10 = [zuqiu, yumaoqiupai, wangqiupai, lanqiu, lunhua, bingbangqiupai, huaban, qitaqixie];
-var qicai = createType('器材', content10);
-var zixingche = createObject(70, '自行车');
-var diandongche = createObject(71, '电动车');
-var qitadaibu = createObject(72, '其他');
-var content11 = [zixingche, diandongche, qitadaibu];
-var daibu = createType('代步', content11);
-var wenxue = createObject(73, '文学');
-var manhua = createObject(74, '漫画');
-var xiaoshuo = createObject(75, '小说');
-var qitaxiuyang = createObject(76, '其他');
-var content12 = [wenxue, manhua, xiaoshuo, qitaxiuyang];
-var xiuyang = createType('修养', content12);
-var shengwu = createObject(77, '生物');
-var huaxue = createObject(78, '化学');
-var wuli = createObject(79, '物理');
-var yuwen = createObject(80, '语文');
-var waiyu = createObject(81, '外语');
-var shuxue = createObject(82, '数学');
-var zhengzhi = createObject(83, '政治');
-var lishi = createObject(84, '历史');
-var dili = createObject(85, '地理');
-var jisuanji = createObject(86, '计算机');
-var jixie = createObject(87, '机械');
-var tumu = createObject(88, '土木');
-var yishu = createObject(89, '艺术');
-var qitashu = createObject(90, '其他');
-var content13 = [shengwu, huaxue, wuli, yuwen, waiyu, shuxue, zhengzhi, lishi, dili,
-    jisuanji, jixie, tumu, yishu, qitashu];
-var zhuanye = createType('专业', content13);
-var bi = createObject(91, '笔');
-var qitawenju = createObject(92, '其他');
-var content14 = [bi, qitawenju];
-var wenju = createType('文具', content14);
-var qitaqita = createObject(94, '其他');
-var content15 = [qitaqita];
-var qitaA = createType('其他', content15);
-var type_list = [[shouji, xiangji, diannao], [jiadian, yingyin],
-    [nvzhuang, nanzhuang, nvxie, nanxie, xiangbao, shoubiao], [qicai, daibu]
-    , [xiuyang, zhuanye, wenju], [qitaA]];
-function createObject(id, name) {
+
+// 文学与艺术类
+var xiaoshuo = createObject(1, '小说', [
+    createObject(1, '言情小说'),
+    createObject(2, '科幻小说'),
+    createObject(3, '悬疑小说'),
+    createObject(4, '历史小说'),
+    createObject(5, '武侠小说')
+]);
+
+var shige = createObject(2, '诗歌', [
+    createObject(6, '古典诗词'),
+    createObject(7, '现代诗歌'),
+    createObject(8, '外国诗歌')
+]);
+
+var xiju = createObject(3, '戏剧', [
+    createObject(9, '话剧剧本'),
+    createObject(10, '戏曲剧本'),
+    createObject(11, '影视剧本')
+]);
+
+var sanwen = createObject(4, '散文随笔', [
+    createObject(12, '现代散文'),
+    createObject(13, '经典散文'),
+    createObject(14, '随笔杂文')
+]);
+
+var wenxuelilun = createObject(5, '文学理论与批评', [
+    createObject(15, '文学理论'),
+    createObject(16, '文学批评'),
+    createObject(17, '比较文学')
+]);
+
+var wenxueContent = [xiaoshuo, shige, xiju, sanwen, wenxuelilun];
+var wenxueType = createType('文学与艺术类', wenxueContent);
+
+// 科学与技术类
+var ziran = createObject(6, '自然科学', [
+    createObject(18, '物理学'),
+    createObject(19, '化学'),
+    createObject(20, '生物学'),
+    createObject(21, '天文学')
+]);
+
+var gongcheng = createObject(7, '工程技术', [
+    createObject(22, '机械工程'),
+    createObject(23, '电子工程'),
+    createObject(24, '建筑工程')
+]);
+
+var jisuanji = createObject(8, '计算机科学', [
+    createObject(25, '编程语言'),
+    createObject(26, '人工智能'),
+    createObject(27, '网络安全')
+]);
+
+var yixue = createObject(9, '医学健康', [
+    createObject(28, '临床医学'),
+    createObject(29, '中医中药'),
+    createObject(30, '健康养生')
+]);
+
+var shuxue = createObject(10, '数学', [
+    createObject(31, '高等数学'),
+    createObject(32, '统计学'),
+    createObject(33, '应用数学')
+]);
+
+var kejiContent = [ziran, gongcheng, jisuanji, yixue, shuxue];
+var kejiType = createType('科学与技术类', kejiContent);
+
+// 人文社科类
+var lishi = createObject(11, '历史', [
+    createObject(34, '中国历史'),
+    createObject(35, '世界历史'),
+    createObject(36, '历史研究')
+]);
+
+var zhexue = createObject(12, '哲学', [
+    createObject(37, '中国哲学'),
+    createObject(38, '西方哲学'),
+    createObject(39, '哲学研究')
+]);
+
+var xinlixue = createObject(13, '心理学', [
+    createObject(40, '基础心理学'),
+    createObject(41, '应用心理学'),
+    createObject(42, '心理咨询')
+]);
+
+var shehuixue = createObject(14, '社会学', [
+    createObject(43, '社会研究'),
+    createObject(44, '社会工作'),
+    createObject(45, '人类学')
+]);
+
+var zhengzhifalu = createObject(15, '政治法律', [
+    createObject(46, '政治学'),
+    createObject(47, '法学理论'),
+    createObject(48, '国际政治')
+]);
+
+var renwenContent = [lishi, zhexue, xinlixue, shehuixue, zhengzhifalu];
+var renwenType = createType('人文社科类', renwenContent);
+
+// 经济与管理类
+var jingji = createObject(16, '经济学', [
+    createObject(48, '宏观经济学'),
+    createObject(49, '微观经济学'),
+    createObject(50, '经济史')
+]);
+
+var jinrong = createObject(17, '金融投资', [
+    createObject(51, '股票投资'),
+    createObject(52, '基金理财'),
+    createObject(53, '风险管理')
+]);
+
+var qiye = createObject(18, '企业管理', [
+    createObject(54, '战略管理'),
+    createObject(55, '人力资源管理'),
+    createObject(56, '市场营销')
+]);
+
+var kuaiji = createObject(19, '会计审计', [
+    createObject(57, '会计实务'),
+    createObject(58, '审计实务'),
+    createObject(59, '财务管理')
+]);
+
+var chuangye = createObject(20, '创业创新', [
+    createObject(60, '创业指南'),
+    createObject(61, '商业模式'),
+    createObject(62, '创新思维')
+]);
+
+var jingguanContent = [jingji, jinrong, qiye, kuaiji, chuangye];
+var jingguanType = createType('经济与管理类', jingguanContent);
+
+// 生活与休闲类
+var meishi = createObject(21, '美食烹饪', [
+    createObject(63, '中餐烹饪'),
+    createObject(64, '西餐烘焙'),
+    createObject(65, '饮食文化')
+]);
+
+var lvxing = createObject(22, '旅行指南', [
+    createObject(66, '国内旅行'),
+    createObject(67, '境外旅行'),
+    createObject(68, '探险旅行')
+]);
+
+var jiaju = createObject(23, '家居生活', [
+    createObject(69, '家居设计'),
+    createObject(70, '家居装修'),
+    createObject(71, '生活百科')
+]);
+
+var yundong = createObject(24, '运动健身', [
+    createObject(72, '运动健身'),
+    createObject(73, '体育竞技'),
+    createObject(74, '户外运动')
+]);
+
+var shishang = createObject(25, '时尚美容', [
+    createObject(75, '时尚搭配'),
+    createObject(76, '美容护肤'),
+    createObject(77, '个人形象')
+]);
+
+var shenghuoContent = [meishi, lvxing, jiaju, yundong, shishang];
+var shenghuoType = createType('生活与休闲类', shenghuoContent);
+
+// 教育与学习类
+var yuyan = createObject(26, '语言学习', [
+    createObject(78, '英语学习'),
+    createObject(79, '小语种学习'),
+    createObject(80, '汉语学习')
+]);
+
+var kaoshi = createObject(27, '考试辅导', [
+    createObject(81, '升学考试'),
+    createObject(82, '职业资格考试'),
+    createObject(83, '语言考试')
+]);
+
+var jiaocai = createObject(28, '教材教辅', [
+    createObject(84, '中小学教材'),
+    createObject(85, '大学教材'),
+    createObject(86, '参考书')
+]);
+
+var fangfa = createObject(29, '学习方法', [
+    createObject(87, '学习技巧'),
+    createObject(88, '记忆方法'),
+    createObject(89, '考试技巧')
+]);
+
+var ertong = createObject(30, '儿童教育', [
+    createObject(90, '早教启蒙'),
+    createObject(91, '儿童文学'),
+    createObject(92, '素质教育')
+]);
+
+var jiaoyuContent = [yuyan, kaoshi, jiaocai, fangfa, ertong];
+var jiaoyuType = createType('教育与学习类', jiaoyuContent);
+
+// 分类列表
+var type_list = [
+    [wenxueType],
+    [kejiType],
+    [renwenType],
+    [jingguanType],
+    [shenghuoType],
+    [jiaoyuType]
+];
+
+function createObject(id, name, subcategories) {
     var temp = new Object();
     temp.id = id;
     temp.name = name;
+    if (subcategories) {
+        temp.content = subcategories;
+    }
     return temp;
 }
+
 function createType(name, content) {
     var temp = new Object();
     temp.name = name;
     temp.content = content;
     return temp;
 }
+
 function getTypeList() {
     return type_list;
 }

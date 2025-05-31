@@ -1,0 +1,56 @@
+.require_content_div {
+    width: 75%;
+    min-height: 20em;
+    margin-top: 3%;
+    margin-left: 25%;
+    display: block;
+    z-index: 25;
+}
+
+.require_one_part {
+    width: 23%;
+    float: left;
+    margin: 5% 2%;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 2%;
+    line-height: 1.6;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.require_one_part:hover {
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.require_one_part .what_info {
+    font-size: 1.1em;
+    margin: 8px 0;
+    color: #333;
+}
+
+.all_info {
+    height: 3em;
+    overflow: hidden;
+    color: #666;
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.all_info span:first-child {
+    color: #333;
+    font-weight: 500;
+}
+
+.what_info span:first-child {
+    color: #333;
+    font-weight: 500;
+    margin-right: 4px;
+}
+
+.what_info span:last-child {
+    color: #666;
+} 

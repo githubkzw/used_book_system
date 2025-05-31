@@ -22,7 +22,7 @@ $(function () {
     $('.flip_to_register').bind('click', function () {
         $('.login').fadeOut(300, function() {
             $('.register_page').fadeIn(300);
-            css3Transform(document.getElementsByClassName('content')[0], "rotateY(-90deg)");
+        css3Transform(document.getElementsByClassName('content')[0], "rotateY(-90deg)");
         });
         $('.forget_password').hide();
         $('.enter_password').hide();
@@ -33,7 +33,7 @@ $(function () {
     $('.go_to_forget').bind('click', function () {
         $('.login').fadeOut(300, function() {
             $('.forget_password').fadeIn(300);
-            css3Transform(document.getElementsByClassName('content')[0], "rotateY(90deg)");
+        css3Transform(document.getElementsByClassName('content')[0], "rotateY(90deg)");
         });
         $('.register_page').hide();
         $('.enter_password').hide();
@@ -93,7 +93,7 @@ $(function () {
                     $('.login').hide();
                     $('.forget_password').hide();
                     $('.enter_password').fadeIn(300, function() {
-                        css3Transform(document.getElementsByClassName('content')[0], "rotateY(-180deg)");
+                    css3Transform(document.getElementsByClassName('content')[0], "rotateY(-180deg)");
                     });
                     $('.confirm_register_button').html('注册');
                 }
@@ -139,7 +139,7 @@ $(function () {
                     $('.login').hide();
                     $('.register_page').hide();
                     $('.enter_password').fadeIn(300, function() {
-                        css3Transform(document.getElementsByClassName('content')[0], "rotateY(180deg)");
+                    css3Transform(document.getElementsByClassName('content')[0], "rotateY(180deg)");
                     });
                     $('.confirm_register_button').html('重置密码');
                 }

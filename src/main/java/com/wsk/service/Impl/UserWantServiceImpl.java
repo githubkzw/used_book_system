@@ -1,4 +1,4 @@
-package com.wsk.service.Impl;
+package com.wsk.service.impl;
 
 import com.wsk.dao.UserWantMapper;
 import com.wsk.pojo.UserWant;
@@ -64,5 +64,10 @@ public class UserWantServiceImpl implements UserWantService {
     @Override
     public List<UserWant> selectAll() {
         return userWantMapper.selectAll();
+    }
+
+    @Override
+    public List<UserWant> selectBySort(int sort) {
+        return userWantMapper.selectBySort(sort);
     }
 }

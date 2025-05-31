@@ -14,7 +14,14 @@ $(function () {
             $('.particular_type_div').css({"margin-top": "15%"});
         }
     });
+    
+    // 添加延迟变量
+    var hoverTimeout;
+    
     $('.my_type_div ul li').hover(function () {
+        var $particularDiv = $('.particular_type_div');
+        clearTimeout(hoverTimeout);
+        
         var temp_class = $(this).attr("class");
         if (temp_class == 'type_1') {
             addList(0);
@@ -29,75 +36,99 @@ $(function () {
         } else if (temp_class == 'type_6') {
             addList(5);
         }
-        function addList(id) {
-            var which = type_list[id];
-            var my_string = "";
-            for (j = 0; j < which.length; j++) {
-                var type_i = which[j];
-                var arr = type_i.content;
-                var a_list = "";
-                for (i = 0; i < arr.length; i++) {
-                    a_list += "<a id = '" + arr[i].id + "' class='shop_sort'>" + arr[i].name + "</a>";
+        
+        $particularDiv.show(0).addClass('show');
+        
+    }, function() {
+        // 鼠标移出时添加延迟
+        hoverTimeout = setTimeout(function() {
+            hideParticular();
+        }, 300);
+    });
+    
+    // 为particular_type_div添加hover事件
+    $('.particular_type_div').hover(function() {
+        clearTimeout(hoverTimeout);
+    }, function() {
+        hideParticular();
+    });
+
+    function addList(id) {
+        var which = type_list[id];
+        var my_string = "";
+        for (j = 0; j < which.length; j++) {
+            var type_i = which[j];
+            var arr = type_i.content;
+            for (i = 0; i < arr.length; i++) {
+                var middleCategory = arr[i];
+                var subcategory_list = "";
+                if (middleCategory.content && middleCategory.content.length > 0) {
+                    for (var k = 0; k < middleCategory.content.length; k++) {
+                        var subCategory = middleCategory.content[k];
+                        subcategory_list += "<a id='" + subCategory.id + "' class='shop_sort'>" + subCategory.name + "</a>";
+                    }
                 }
                 my_string += "<div class='one_part'><div class='type_title_div'>" +
-                    "<span class='type_border_span'>1</span><h3>" + type_i.name + "</h3></div><div " +
-                    "class='type_goods_list'>" + a_list + "</div></div>";
+                    "<span class='type_border_span'>" + (i + 1) + "</span><h3>" + middleCategory.name + "</h3></div><div " +
+                    "class='type_goods_list'>" + subcategory_list + "</div></div>";
             }
-            $('.particular_type_div').html(my_string);
-            //  点击事件
-            $('.type_goods_list a.shop_sort').click(function () {
-                var wsk = $(this).attr('id');
-                var $all_product = $('.all_product');
-                $.ajax({
-                    url: 'selectBySort.do',
-                    type: 'post',
-                    dataType: 'JSON',
-                    data: {sort: wsk},
-                    success: function (data) {
-                        $all_product.html('');
-                        if (data.length === 0) {
-                            $all_product.append("<div class='product_content_div'>" +
-                                "<figure class='detail_product'>" +
-                                "<input type='hidden' value= ''/>" +
-                                "<img src='' title='暂时没有该分类的商品' />" +
-                                "<span class='detail_product_name'></span><br/>" +
-                                "<span class='detail_product_cost'></span><br/>" +
-                                "<span class='detail_buy product_1'>加入购物车</span>" +
-                                "</figure>" +
-                                "</div>");
-                        }
-                        for (var i = 0; i < data.length; i++) {
-                            $all_product.append("<div class='product_content_div'>" +
-                                "<div class='detail_product'>" +
-                                "<input type='hidden' value=" + data[i].id + " '/>" +
-                                "<div class='product_img_div'><img class='show_img' src='" + data[i].image + "' title=" + data.name + "'/></div>" +
-                                "<p class='show_tip'>"+data[i].remark+"</p>"+
-                                "<span class='detail_product_name' value='"+data[i].id+"'>" + data[i].name + "</span><br/>" +
-                                "<span class='detail_product_cost'>￥" + data[i].price + "</span><br/>" +
-                                "<span class='detail_buy product_1' value='"+data[i].id+"'>加入购物车</span>" +
-                                "</div>" +
-                                "</div>");
-                        }
-                        //进入查看商品的详情,通过id
-                        $('.detail_product_name').click(function () {
-                            var id = $(this).attr('value');
-                            window.location.href='/selectById.do?id='+id;
-                        });
-                        insertShopCar();
-                    }
-                });
-                // alert(wsk);
-
-            })
         }
+        $('.particular_type_div').html(my_string);
+        
+        // 点击事件
+        $('.type_goods_list a.shop_sort').click(function() {
+            var wsk = $(this).attr('id');
+            var $all_product = $('.all_product');
+            $.ajax({
+                url: 'selectBySort.do',
+                type: 'post',
+                dataType: 'JSON',
+                data: {sort: wsk},
+                success: function (data) {
+                    $all_product.html('');
+                    if (data.length === 0) {
+                        $all_product.append("<div class='product_content_div'>" +
+                            "<div class='detail_product'>" +
+                            "<input type='hidden' value= ''/>" +
+                            "<div class='product_img_div'><img src='' title='暂时没有该分类的商品' /></div>" +
+                            "<span class='detail_product_name'></span><br/>" +
+                            "<span class='detail_product_cost'></span><br/>" +
+                            "<span class='detail_buy product_1'>加入购物车</span>" +
+                            "</div>" +
+                            "</div>");
+                    }
+                    for (var i = 0; i < data.length; i++) {
+                        $all_product.append("<div class='product_content_div'>" +
+                            "<div class='detail_product'>" +
+                            "<input type='hidden' value=" + data[i].id + " '/>" +
+                            "<div class='product_img_div'>" +
+                            "<img class='show_img' src='" + data[i].image + "' title=" + data[i].name + "'/>" +
+                            "</div>" +
+                            "<p class='show_tip'>" + data[i].remark + "</p>" +
+                            "<span class='detail_product_name' value='" + data[i].id + "'>" + data[i].name + "</span><br/>" +
+                            "<span class='detail_product_cost'>￥" + data[i].price + "</span><br/>" +
+                            "<span class='detail_buy product_1' value='" + data[i].id + "'>加入购物车</span>" +
+                            "</div>" +
+                            "</div>");
+                    }
+                    //进入查看商品的详情,通过id
+                    $('.detail_product_name').click(function () {
+                        var id = $(this).attr('value');
+                        window.location.href = '/selectById.do?id=' + id;
+                    });
+                    insertShopCar();
+                }
+            });
+        });
+    }
 
-        $('.particular_type_div').show(0);
-    });
     $('header').click(function () {
         hideParticular();
     });
+
     //new
     bindClick();
+
     //  直接点击页数
     function bindClick() {
         $('.pagination_div ul li').click(function () {
@@ -126,6 +157,7 @@ $(function () {
         var current_page = $('.pagination_div ul li.current_page').children("a").html();
         selectByCounts(current_page);
     });
+
     //下一页
     $('.pagination_gt').click(function () {
         var current = $('.pagination_div ul li.current_page');
@@ -138,7 +170,6 @@ $(function () {
         var current_page = $('.pagination_div ul li.current_page').children("a").html();
         //      通过这个current_page 来获取数据
         selectByCounts(current_page);
-
     });
 
     // temp 当前的值（1,2,3,4...）
@@ -172,6 +203,7 @@ $(function () {
         }
         bindClick();
     }
+
     function selectByCounts(currentCounts) {
         var $all_product = $('.all_product');
         $.ajax({
@@ -197,45 +229,46 @@ $(function () {
                         "<div class='detail_product'>" +
                         "<input type='hidden' value=" + data[i].id + " '/>" +
                         "<div class='product_img_div'>" +
-                        "<img class='show_img' src='" + data[i].image + "' title=" + data.name + "'/>" +
+                        "<img class='show_img' src='" + data[i].image + "' title=" + data[i].name + "'/>" +
                         "</div>" +
-                        "<p class='show_tip'>"+data[i].remark+"</p>"+
-                        "<span class='detail_product_name' value='"+data[i].id+"'>" + data[i].name + "</span><br/>" +
+                        "<p class='show_tip'>" + data[i].remark + "</p>" +
+                        "<span class='detail_product_name' value='" + data[i].id + "'>" + data[i].name + "</span><br/>" +
                         "<span class='detail_product_cost'>￥" + data[i].price + "</span><br/>" +
-                        "<span class='detail_buy product_1' value='"+data[i].id+"'>加入购物车</span>" +
+                        "<span class='detail_buy product_1' value='" + data[i].id + "'>加入购物车</span>" +
                         "</div>" +
                         "</div>");
                 }
                 //进入查看商品的详情,通过id
                 $('.detail_product_name').click(function () {
                     var id = $(this).attr('value');
-                    window.location.href='/selectById.do?id='+id;
+                    window.location.href = '/selectById.do?id=' + id;
                 });
                 insertShopCar();
             }
         });
-
     }
+
     //进入查看商品的详情,通过id
     $('.detail_product_name').click(function () {
         var id = $(this).attr('value');
-        window.location.href='/selectById.do?id='+id;
+        window.location.href = '/selectById.do?id=' + id;
     });
+
     function insertShopCar() {
         $('.detail_buy').click(function () {
             var id = $(this).attr('value');
             $.ajax({
-                url:'/insertGoodsCar.do',
-                dataType:'JSON',
-                type:'post',
-                data:{id:id},
-                success:function (data) {
+                url: '/insertGoodsCar.do',
+                dataType: 'JSON',
+                type: 'post',
+                data: {id: id},
+                success: function (data) {
                     var result = data.result;
-                    if (result == '2'){
+                    if (result == '2') {
                         alert('您还未登录，请先登录！！！');
-                    } else if (result == '1'){
+                    } else if (result == '1') {
                         alert('加入购物车成功');
-                    } else if (result == '0'){
+                    } else if (result == '0') {
                         alert('加入购物车失败');
                     } else {
                         alert('发生了错误，请检测网络');
@@ -244,10 +277,13 @@ $(function () {
             })
         });
     }
-
 });
+
 function hideParticular() {
     if ($('.particular_type_div').is(":visible")) {
-        $('.particular_type_div').hide(0);
+        $('.particular_type_div').removeClass('show');
+        setTimeout(function() {
+            $('.particular_type_div').hide(0);
+        }, 300);
     }
 }

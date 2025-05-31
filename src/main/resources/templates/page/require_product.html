@@ -19,7 +19,7 @@
 <!--name,sort,quantity,price,remark,token,-->
 <div class="top_content">
     <div class="publish_product_div">
-        <form action="/publishUserWant.do" method="post">
+        <form action="/publishUserWant.do" method="post" onsubmit="return validateForm()">
             <input type="hidden" th:value="${token}" name="token"/>
             <div class="publish_one_par">
                 <div class="publish_title">
@@ -34,7 +34,7 @@
                     <h3>数量</h3>
                 </div>
                 <div class="publish_content">
-                    <input type="text" class="count_input" name="quantity" required="required"/>
+                    <input type="number" class="count_input" name="quantity" required="required" min="1"/>
                 </div>
             </div>
             <div class="publish_one_par">
@@ -42,7 +42,7 @@
                     <h3>单价</h3>
                 </div>
                 <div class="publish_content cost_content">
-                    <input type="text" class="cost_input" name="price" required="required"/><span>  RMB(.00)</span>
+                    <input type="number" class="cost_input" name="price" required="required" min="0" step="0.01"/><span>  RMB(.00)</span>
                 </div>
             </div>
             <div class="publish_one_par">
@@ -60,32 +60,16 @@
                 </div>
                 <div class="publish_content">
                     <select class="choose_first_type">
-                        <option id="type_1" selected="selected">数码科技</option>
-                        <option id="type_2">影音家电</option>
-                        <option id="type_3">鞋服配饰</option>
-                        <option id="type_4">运动代步</option>
-                        <option id="type_5">书籍文具</option>
-                        <option id="type_6">其他</option>
-                    </select><span class="to_left">--</span>
+                        <option id="type_1" selected="selected">文学与艺术类</option>
+                        <option id="type_2">科学与技术类</option>
+                        <option id="type_3">人文社科类</option>
+                        <option id="type_4">经济与管理类</option>
+                        <option id="type_5">生活与休闲类</option>
+                        <option id="type_6">教育与学习类</option>
+                    </select>
                     <select class="choose_second_type">
-                        <option>三成</option>
-                        <option>四成</option>
-                        <option>五成</option>
-                        <option>六成</option>
-                        <option>七成</option>
-                        <option>八成</option>
-                        <option>九成</option>
-                        <option>全新</option>
-                    </select><span class="to_left">--</span>
-                    <select class="choose_third_type" name="sort">
-                        <option>三成</option>
-                        <option>四成</option>
-                        <option>五成</option>
-                        <option>六成</option>
-                        <option>七成</option>
-                        <option>八成</option>
-                        <option>九成</option>
-                        <option>全新</option>
+                    </select>
+                    <select class="choose_third_type" name="sort" required="required">
                     </select>
                 </div>
             </div>
@@ -98,5 +82,15 @@
         <p>Copyright © 2017.Company name All rights reserved.<a href="/"></a></p>
     </footer>
 </div>
+<script>
+function validateForm() {
+    var sort = document.querySelector('.choose_third_type').value;
+    if (!sort) {
+        alert('请选择完整的分类信息');
+        return false;
+    }
+    return true;
+}
+</script>
 </body>
 </html>

@@ -27,4 +27,6 @@ public interface UserWantService {
     List<UserWant> selectMineByUid(int id);
 
     List<UserWant> selectAll();
+
+    List<UserWant> selectBySort(int sort);
 }

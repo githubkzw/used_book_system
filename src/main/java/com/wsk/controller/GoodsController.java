@@ -224,19 +224,98 @@ public class GoodsController {
     }
 
     private String getSort(int sort) {
-        StringBuilder sb = new StringBuilder();
-        Specific specific = selectSpecificBySort(sort);
-        int cid = specific.getCid();
-        Classification classification = selectClassificationByCid(cid);
-        int aid = classification.getAid();
-        AllKinds allKinds = selectAllKindsByAid(aid);
-        String allName = allKinds.getName();
-        sb.append(allName);
-        sb.append("-");
-        sb.append(classification.getName());
-        sb.append("-");
-        sb.append(specific.getName());
-        return sb.toString();
+        if (sort <= 0) {
+            System.out.println("Warning: Invalid sort value: " + sort);
+            return "未知分类";
+        }
+
+        try {
+            // 获取第三层分类
+            Specific specific = selectSpecificBySort(sort);
+            if (specific == null) {
+                System.out.println("Warning: No specific category found for sort: " + sort);
+                return "未知分类";
+            }
+
+            // 获取第二层分类
+            Integer cid = specific.getCid();
+            if (cid == null) {
+                System.out.println("Warning: Specific category has null cid for sort: " + sort);
+                return specific.getName() != null ? specific.getName() : "未知分类";
+            }
+
+            Classification classification = selectClassificationByCid(cid);
+            if (classification == null) {
+                System.out.println("Warning: No classification found for cid: " + cid);
+                return specific.getName() != null ? specific.getName() : "未知分类";
+            }
+
+            // 获取第一层分类
+            Integer aid = classification.getAid();
+            if (aid == null) {
+                System.out.println("Warning: Classification has null aid for cid: " + cid);
+                return classification.getName() != null ? classification.getName() : "未知分类";
+            }
+
+            AllKinds allKinds = selectAllKindsByAid(aid);
+            if (allKinds == null) {
+                System.out.println("Warning: No allKinds found for aid: " + aid);
+                return classification.getName() != null ? classification.getName() : "未知分类";
+            }
+
+            // 构建完整分类名
+            StringBuilder sb = new StringBuilder();
+            
+            String allName = allKinds.getName();
+            String classificationName = classification.getName();
+            String specificName = specific.getName();
+            
+            if (allName != null) {
+                sb.append(allName);
+            }
+            
+            if (classificationName != null) {
+                if (sb.length() > 0) {
+                    sb.append("-");
+                }
+                sb.append(classificationName);
+            }
+            
+            if (specificName != null) {
+                if (sb.length() > 0) {
+                    sb.append("-");
+                }
+                sb.append(specificName);
+            }
+            
+            return sb.length() > 0 ? sb.toString() : "未知分类";
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error in getSort for sort " + sort + ": " + e.getMessage());
+            return "未知分类";
+        }
+    }
+
+    @RequestMapping(value = "/selectRequireBySort.do", method = RequestMethod.POST)
+    @ResponseBody
+    public List<UserWantBean> selectRequireBySort(@RequestParam int sort) {
+        List<UserWant> userWants = userWantService.selectBySort(sort);
+        List<UserWantBean> result = new ArrayList<>();
+        
+        for (UserWant userWant : userWants) {
+            UserWantBean bean = new UserWantBean();
+            bean.setId(userWant.getId());
+            bean.setName(userWant.getName());
+            bean.setQuantity(userWant.getQuantity());
+            bean.setPrice(userWant.getPrice().doubleValue());
+            bean.setRemark(userWant.getRemark());
+            bean.setSort(getSort(userWant.getSort()));
+            bean.setUid(userWant.getUid());
+            result.add(bean);
+        }
+        
+        return result;
     }
 
 }

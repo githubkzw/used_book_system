@@ -23,8 +23,11 @@ spring:
     suffix: .html
     mode: HTML5
     encoding: UTF-8
-#  mvc:
-#    static-path-pattern: classpath:/resources/static/**
+  mvc:
+   static-path-pattern: /resources/**
+  web:
+    resources:
+      static-locations: classpath:/mystatic/
 #  resources:
 #    static-locations: classpath:/resources/static/**
 mybatis:
@@ -47,6 +50,6 @@ logging:
 #  path: ./logs
 my:
   file:
-    saveImage: /toImage/
-    saveThumbnails: /toImage/thumbnails/
+    saveImage: /toImage
+    saveThumbnails: /toImage/thumbnails
     save: D #文件保存的系统盘，例如D盘则为D，C盘则C

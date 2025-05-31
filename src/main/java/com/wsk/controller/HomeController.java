@@ -51,16 +51,29 @@ public class HomeController {
             List<ShopInformationBean> list = new ArrayList<>();
             int counts = getShopCounts();
             model.addAttribute("shopInformationCounts", counts);
-            String stringBuffer;
+            
             for (ShopInformation shopInformation : shopInformations) {
-                stringBuffer = getSortName(shopInformation.getSort());
                 ShopInformationBean shopInformationBean = new ShopInformationBean();
+                
+                // 安全地获取分类名称
+                Integer sort = shopInformation.getSort();
+                String sortName;
+                if (sort == null) {
+                    sortName = "未分类";
+                    System.out.println("Warning: Shop ID " + shopInformation.getId() + " has null sort value");
+                } else {
+                    sortName = getSortName(sort);
+                    if (sortName.equals("未知分类")) {
+                        System.out.println("Warning: Shop ID " + shopInformation.getId() + " has invalid sort value: " + sort);
+                    }
+                }
+                
                 shopInformationBean.setId(shopInformation.getId());
                 shopInformationBean.setName(shopInformation.getName());
                 shopInformationBean.setLevel(shopInformation.getLevel());
                 shopInformationBean.setPrice(shopInformation.getPrice().doubleValue());
                 shopInformationBean.setRemark(shopInformation.getRemark());
-                shopInformationBean.setSort(stringBuffer);
+                shopInformationBean.setSort(sortName);
                 shopInformationBean.setQuantity(shopInformation.getQuantity());
                 shopInformationBean.setUid(shopInformation.getUid());
                 shopInformationBean.setTransaction(shopInformation.getTransaction());
@@ -70,6 +83,7 @@ public class HomeController {
             model.addAttribute("shopInformationBean", list);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error in home method: " + e.getMessage());
             return "page/login_page";
         }
         return "index";
@@ -117,19 +131,77 @@ public class HomeController {
 
     //通过分类的第三层id获取全名
     private String getSortName(int sort) {
-        StringBuilder stringBuffer = new StringBuilder();
-        Specific specific = selectSpecificBySort(sort);
-        int cid = specific.getCid();
-        Classification classification = selectClassificationByCid(cid);
-        int aid = classification.getAid();
-        AllKinds allKinds = selectAllKindsByAid(aid);
-        stringBuffer.append(allKinds.getName());
-        stringBuffer.append("-");
-        stringBuffer.append(classification.getName());
-        stringBuffer.append("-");
-        stringBuffer.append(specific.getName());
-//        System.out.println(sort);
-        return stringBuffer.toString();
+        if (sort <= 0) {
+            System.out.println("Warning: Invalid sort value: " + sort);
+            return "未知分类";
+        }
+
+        try {
+            // 获取第三层分类
+            Specific specific = selectSpecificBySort(sort);
+            if (specific == null) {
+                System.out.println("Warning: No specific category found for sort: " + sort);
+                return "未知分类";
+            }
+
+            // 获取第二层分类
+            Integer cid = specific.getCid();
+            if (cid == null) {
+                System.out.println("Warning: Specific category has null cid for sort: " + sort);
+                return specific.getName() != null ? specific.getName() : "未知分类";
+            }
+
+            Classification classification = selectClassificationByCid(cid);
+            if (classification == null) {
+                System.out.println("Warning: No classification found for cid: " + cid);
+                return specific.getName() != null ? specific.getName() : "未知分类";
+            }
+
+            // 获取第一层分类
+            Integer aid = classification.getAid();
+            if (aid == null) {
+                System.out.println("Warning: Classification has null aid for cid: " + cid);
+                return classification.getName() != null ? classification.getName() : "未知分类";
+            }
+
+            AllKinds allKinds = selectAllKindsByAid(aid);
+            if (allKinds == null) {
+                System.out.println("Warning: No allKinds found for aid: " + aid);
+                return classification.getName() != null ? classification.getName() : "未知分类";
+            }
+
+            // 构建完整分类名
+            StringBuilder stringBuffer = new StringBuilder();
+            
+            String allKindsName = allKinds.getName();
+            String classificationName = classification.getName();
+            String specificName = specific.getName();
+            
+            if (allKindsName != null) {
+                stringBuffer.append(allKindsName);
+            }
+            
+            if (classificationName != null) {
+                if (stringBuffer.length() > 0) {
+                    stringBuffer.append("-");
+                }
+                stringBuffer.append(classificationName);
+            }
+            
+            if (specificName != null) {
+                if (stringBuffer.length() > 0) {
+                    stringBuffer.append("-");
+                }
+                stringBuffer.append(specificName);
+            }
+            
+            return stringBuffer.length() > 0 ? stringBuffer.toString() : "未知分类";
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error in getSortName for sort " + sort + ": " + e.getMessage());
+            return "未知分类";
+        }
     }
 
     //获得分类中的第一层
@@ -187,11 +259,27 @@ public class HomeController {
 
     //获取商品，分页,一次性获取end个
     private List<ShopInformation> selectTen(int start, int end) {
-        Map map = new HashMap();
-        map.put("start", (start - 1) * end);
-        map.put("end", end);
-        List<ShopInformation> list = shopInformationService.selectTen(map);
-        return list;
+        try {
+            Map<String, Integer> map = new HashMap<>();
+            map.put("start", (start - 1) * end);
+            map.put("end", end);
+            List<ShopInformation> list = shopInformationService.selectTen(map);
+            
+            // 打印调试信息
+            if (list != null) {
+                for (ShopInformation shop : list) {
+                    System.out.println("Debug - Shop ID: " + shop.getId() + 
+                                     ", Name: " + shop.getName() + 
+                                     ", Sort: " + shop.getSort());
+                }
+            }
+            
+            return list != null ? list : new ArrayList<>();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error in selectTen: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     //获取最详细的分类，第三层
