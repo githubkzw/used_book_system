@@ -1,5 +1,5 @@
 /**
- * Created by alone on 2017/5/16.
+ * Created by alone on 2025/5/16.
  */
 $(function () {
     var typeList = getTypeList();

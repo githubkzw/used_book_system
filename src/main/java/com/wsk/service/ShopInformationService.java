@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by wsk1103 on 2017/5/12.
+ * Created by kzw on 2025/5/12.
  */
 public interface ShopInformationService {
     int deleteByPrimaryKey(Integer id);

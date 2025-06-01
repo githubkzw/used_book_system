@@ -5,7 +5,7 @@ import com.wsk.pojo.GoodsCar;
 import java.util.List;
 
 /**
- * Created by wsk1103 on 2017/5/13.
+ * Created by wsk1103 on 2025/5/13.
  */
 public interface GoodsCarService {
     int deleteByPrimaryKey(Integer id);

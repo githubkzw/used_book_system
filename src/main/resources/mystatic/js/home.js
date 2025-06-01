@@ -1,5 +1,5 @@
 /**
- * Created by wsk1103 on 2017/5/14.
+ * Created by wsk1103 on 2025/5/14.
  */
 $(function () {
     $('.allKinds').change(function () {

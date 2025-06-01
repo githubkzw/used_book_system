@@ -3,7 +3,7 @@ package com.wsk.tool;
 import java.util.ArrayList;
 
 /**
- * Created by alone on 2017/1/2.
+ * Created by alone on 2025/1/2.
  */
 
 public class RecognitionResultBean {

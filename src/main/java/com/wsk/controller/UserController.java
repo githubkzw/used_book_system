@@ -32,7 +32,7 @@ import java.util.*;
 import com.wsk.tool.Pornographic;*/
 
 /**
- * Created by wsk1103 on 2017/5/9.
+ * Created by wsk1103 on 2025/5/9.
  */
 @Controller
 @Slf4j
@@ -560,7 +560,6 @@ public class UserController {
         if (StringUtils.getInstance().isNullOrEmpty(userInformation)) {
             userInformation = new UserInformation();
             model.addAttribute("userInformation", userInformation);
-//            list.add(shopCar);
             return "redirect:/login.do";
         } else {
             model.addAttribute("userInformation", userInformation);
@@ -569,13 +568,17 @@ public class UserController {
         List<GoodsCar> goodsCars = goodsCarService.selectByUid(uid);
         List<GoodsCarBean> goodsCarBeans = new ArrayList<>();
         for (GoodsCar goodsCar : goodsCars) {
+            ShopInformation shopInformation = shopInformationService.selectByPrimaryKey(goodsCar.getSid());
+            // 如果商品信息不存在，跳过这个商品
+            if (shopInformation == null) {
+                continue;
+            }
             GoodsCarBean goodsCarBean = new GoodsCarBean();
             goodsCarBean.setUid(goodsCar.getUid());
             goodsCarBean.setSid(goodsCar.getSid());
             goodsCarBean.setModified(goodsCar.getModified());
             goodsCarBean.setId(goodsCar.getId());
             goodsCarBean.setQuantity(goodsCar.getQuantity());
-            ShopInformation shopInformation = shopInformationService.selectByPrimaryKey(goodsCar.getSid());
             goodsCarBean.setName(shopInformation.getName());
             goodsCarBean.setRemark(shopInformation.getRemark());
             goodsCarBean.setImage(shopInformation.getImage());
@@ -657,21 +660,22 @@ public class UserController {
                               @RequestParam int action, @RequestParam(required = false) int id,
                               HttpServletRequest request, Model model) {
         String goodsToken = (String) request.getSession().getAttribute("goodsToken");
-//        String publishProductToken = TokenProccessor.getInstance().makeToken();
-//        request.getSession().setAttribute("token",publishProductToken);
-        //防止重复提交
-        if (StringUtils.getInstance().isNullOrEmpty(goodsToken) || !goodsToken.equals(token)) {
-            return "redirect:publish_product.do?error=1";
-        } else {
-            request.getSession().removeAttribute("goodsToken");
-        }
-//        //从session中获得用户的基本信息
+        //从session中获得用户的基本信息
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
         model.addAttribute("userInformation", userInformation);
         if (StringUtils.getInstance().isNullOrEmpty(userInformation)) {
             //如果用户不存在，
             return "redirect:/login.do";
         }
+        int uid = userInformation.getId();
+        
+        //防止重复提交
+        if (StringUtils.getInstance().isNullOrEmpty(goodsToken) || !goodsToken.equals(token)) {
+            return "redirect:publish_product.do?error=1";
+        } else {
+            request.getSession().removeAttribute("goodsToken");
+        }
+
         name = StringUtils.getInstance().replaceBlank(name);
         remark = StringUtils.getInstance().replaceBlank(remark);
         //judge the data`s format
@@ -734,7 +738,6 @@ public class UserController {
             shopInformation.setImage(random);//This is the other uniquely identifies
             shopInformation.setThumbnails(save);
 //        shopInformation.setUid(4);
-            int uid = (int) request.getSession().getAttribute("uid");
             shopInformation.setUid(uid);
             try {
                 int result = shopInformationService.insertSelective(shopInformation);

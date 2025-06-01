@@ -21,7 +21,7 @@ import java.util.Properties;
 import java.util.Random;
 
 /**
- * Created by wsk1103 on 2017/4/30.
+ * Created by wsk1103 on 2025/4/30.
  */
 @Controller
 public class SendEmailController {

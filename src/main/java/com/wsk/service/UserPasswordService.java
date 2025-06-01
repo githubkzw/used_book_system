@@ -3,7 +3,7 @@ package com.wsk.service;
 import com.wsk.pojo.UserPassword;
 
 /**
- * Created by wsk1103 on 2017/4/27.
+ * Created by wsk1103 on 2025/4/27.
  */
 public interface UserPasswordService {
     int deleteByPrimaryKey(Integer id);

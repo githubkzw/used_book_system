@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by wsk1103 on 2017/5/21.
+ * Created by wsk1103 on 2025/5/21.
  */
 public class ShopContextBean implements Serializable {
     private int id;

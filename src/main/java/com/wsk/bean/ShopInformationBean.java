@@ -3,7 +3,7 @@ package com.wsk.bean;
 import java.io.Serializable;
 
 /**
- * Created by wsk1103 on 2017/5/19.
+ * Created by wsk1103 on 2025/5/19.
  */
 public class ShopInformationBean implements Serializable{
     private int id;

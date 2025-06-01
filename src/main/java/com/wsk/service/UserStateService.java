@@ -3,7 +3,7 @@ package com.wsk.service;
 import com.wsk.pojo.UserState;
 
 /**
- * Created by wsk1103 on 2017/5/13.
+ * Created by wsk1103 on 2025/5/13.
  */
 public interface UserStateService {
     int deleteByPrimaryKey(Integer id);

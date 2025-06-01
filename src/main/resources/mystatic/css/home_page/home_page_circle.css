@@ -13,9 +13,9 @@
 
 .my_slide {
     display: block;
-    width: 80%;
+    width: 85%;
     left: 10%;
-    top: 0;
+    bottom: 30px;
     height: 100%;
     position: absolute;
     float: left;
