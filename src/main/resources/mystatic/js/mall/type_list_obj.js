@@ -109,33 +109,33 @@ var renwenType = createType('人文社科类', renwenContent);
 
 // 经济与管理类
 var jingji = createObject(16, '经济学', [
-    createObject(48, '宏观经济学'),
-    createObject(49, '微观经济学'),
-    createObject(50, '经济史')
+    createObject(49, '宏观经济学'),
+    createObject(50, '微观经济学'),
+    createObject(51, '经济史')
 ]);
 
 var jinrong = createObject(17, '金融投资', [
-    createObject(51, '股票投资'),
-    createObject(52, '基金理财'),
-    createObject(53, '风险管理')
+    createObject(52, '股票投资'),
+    createObject(53, '基金理财'),
+    createObject(54, '风险管理')
 ]);
 
 var qiye = createObject(18, '企业管理', [
-    createObject(54, '战略管理'),
-    createObject(55, '人力资源管理'),
-    createObject(56, '市场营销')
+    createObject(55, '战略管理'),
+    createObject(56, '人力资源管理'),
+    createObject(57, '市场营销')
 ]);
 
 var kuaiji = createObject(19, '会计审计', [
-    createObject(57, '会计实务'),
-    createObject(58, '审计实务'),
-    createObject(59, '财务管理')
+    createObject(58, '会计实务'),
+    createObject(59, '审计实务'),
+    createObject(60, '财务管理')
 ]);
 
 var chuangye = createObject(20, '创业创新', [
-    createObject(60, '创业指南'),
-    createObject(61, '商业模式'),
-    createObject(62, '创新思维')
+    createObject(61, '创业指南'),
+    createObject(62, '商业模式'),
+    createObject(63, '创新思维')
 ]);
 
 var jingguanContent = [jingji, jinrong, qiye, kuaiji, chuangye];
@@ -143,33 +143,33 @@ var jingguanType = createType('经济与管理类', jingguanContent);
 
 // 生活与休闲类
 var meishi = createObject(21, '美食烹饪', [
-    createObject(63, '中餐烹饪'),
-    createObject(64, '西餐烘焙'),
-    createObject(65, '饮食文化')
+    createObject(64, '中餐烹饪'),
+    createObject(65, '西餐烘焙'),
+    createObject(66, '饮食文化')
 ]);
 
 var lvxing = createObject(22, '旅行指南', [
-    createObject(66, '国内旅行'),
-    createObject(67, '境外旅行'),
-    createObject(68, '探险旅行')
+    createObject(67, '国内旅行'),
+    createObject(68, '境外旅行'),
+    createObject(69, '探险旅行')
 ]);
 
 var jiaju = createObject(23, '家居生活', [
-    createObject(69, '家居设计'),
-    createObject(70, '家居装修'),
-    createObject(71, '生活百科')
+    createObject(70, '家居设计'),
+    createObject(71, '家居装修'),
+    createObject(72, '生活百科')
 ]);
 
 var yundong = createObject(24, '运动健身', [
-    createObject(72, '运动健身'),
-    createObject(73, '体育竞技'),
-    createObject(74, '户外运动')
+    createObject(73, '运动健身'),
+    createObject(74, '体育竞技'),
+    createObject(75, '户外运动')
 ]);
 
 var shishang = createObject(25, '时尚美容', [
-    createObject(75, '时尚搭配'),
-    createObject(76, '美容护肤'),
-    createObject(77, '个人形象')
+    createObject(76, '时尚搭配'),
+    createObject(77, '美容护肤'),
+    createObject(78, '个人形象')
 ]);
 
 var shenghuoContent = [meishi, lvxing, jiaju, yundong, shishang];
@@ -177,33 +177,33 @@ var shenghuoType = createType('生活与休闲类', shenghuoContent);
 
 // 教育与学习类
 var yuyan = createObject(26, '语言学习', [
-    createObject(78, '英语学习'),
-    createObject(79, '小语种学习'),
-    createObject(80, '汉语学习')
+    createObject(79, '英语学习'),
+    createObject(80, '小语种学习'),
+    createObject(81, '汉语学习')
 ]);
 
 var kaoshi = createObject(27, '考试辅导', [
-    createObject(81, '升学考试'),
-    createObject(82, '职业资格考试'),
-    createObject(83, '语言考试')
+    createObject(82, '升学考试'),
+    createObject(83, '职业资格考试'),
+    createObject(84, '语言考试')
 ]);
 
 var jiaocai = createObject(28, '教材教辅', [
-    createObject(84, '中小学教材'),
-    createObject(85, '大学教材'),
-    createObject(86, '参考书')
+    createObject(85, '中小学教材'),
+    createObject(86, '大学教材'),
+    createObject(87, '参考书')
 ]);
 
 var fangfa = createObject(29, '学习方法', [
-    createObject(87, '学习技巧'),
-    createObject(88, '记忆方法'),
-    createObject(89, '考试技巧')
+    createObject(88, '学习技巧'),
+    createObject(89, '记忆方法'),
+    createObject(90, '考试技巧')
 ]);
 
 var ertong = createObject(30, '儿童教育', [
-    createObject(90, '早教启蒙'),
-    createObject(91, '儿童文学'),
-    createObject(92, '素质教育')
+    createObject(91, '早教启蒙'),
+    createObject(92, '儿童文学'),
+    createObject(93, '素质教育')
 ]);
 
 var jiaoyuContent = [yuyan, kaoshi, jiaocai, fangfa, ertong];

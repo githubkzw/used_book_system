@@ -5,21 +5,208 @@
     <title>发布的商品</title>
     <link rel="icon" href="/img/page_icon.png"/>
     <link rel="stylesheet" href="/css/home_page/header_and_nav.css"/>
-    <link href="/css/personal/my_publish_product.css" rel="stylesheet"/>
+    <style>
+        .temp_content {
+            padding: 20px;
+            margin-top: 150px;
+        }
+
+        .product_content_div {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .detail_product {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            height: auto;
+        }
+
+        .detail_product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .product_img_container {
+            width: 100%;
+            height: 100%;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .product_img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product_info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .detail_product_name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .detail_product_cost {
+            font-size: 20px;
+            color: #e4393c;
+            font-weight: bold;
+        }
+
+        .detail_product_level,
+        .detail_product_quantity,
+        .detail_product_sort {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .detail_product_remark {
+            color: #999;
+            font-size: 14px;
+            line-height: 1.4;
+            margin: 8px 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            min-height: 40px;
+        }
+
+        .delete_and_update {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .delete_and_update img {
+            width: 24px;
+            height: 24px;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f5f5f5;
+        }
+
+        .delete_and_update img:hover {
+            background: #e0e0e0;
+            transform: scale(1.1);
+        }
+
+        .update_publish {
+            background: #f0f9ff !important;
+        }
+
+        .delete_publish {
+            background: #fff5f5 !important;
+        }
+
+        .pagination_div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            gap: 10px;
+        }
+
+        .pagination_div ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            gap: 10px;
+        }
+
+        .pagination_div a,
+        .pagination_div li {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            background: white;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #ddd;
+            text-decoration: none;
+        }
+
+        .pagination_div a:hover,
+        .pagination_div li:hover {
+            background: slateblue;
+            color: white;
+            border-color: slateblue;
+        }
+
+        footer {
+            background: slateblue;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            border-radius: 8px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .product_content_div {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                padding: 10px;
+            }
+
+            .detail_product {
+                padding: 10px;
+            }
+
+            .product_img {
+                height: 160px;
+            }
+        }
+    </style>
     <script src="/js/jquery-1.3.2.min.js"></script>
     <script src="/js/home/header_model_js.js"></script>
     <script>
         $(function () {
             $('.update_publish').click(function () {
                 var id = $(this).attr('value');
-//                alert(id);
                 window.location.href = '/modifiedMyPublishProduct.do?id=' + id;
             });
             $('.delete_publish').click(function () {
-                var r = confirm("确定删除？？？？")
+                var r = confirm("确定删除？")
                 if (r == true) {
                     var id = $(this).attr('value');
-//                    alert(id);
                     window.location.href="/deleteShop.do?id="+id;
                 }
             });
@@ -28,13 +215,7 @@
                 window.location.href='/selectById.do?id='+id;
             });
         });
-
     </script>
-    <style>
-        .product_content_div .detail_product .delete_and_update {
-            display: none; /* 隐藏编辑和删除按钮 */
-        }
-    </style>
 </head>
 <body>
 <header th:include="header :: copy"></header>
@@ -42,19 +223,24 @@
 <nav th:include="my_nav :: my_nav" class="my_nav"></nav>
 <div th:include="personal_nav :: personal_nav" class="personal_nav"></div>
 <div class="temp_content">
-    <!--注意需要加一个br，不然会在同一行显示-->
     <div class="product_content_div">
-        <figure class="detail_product" th:each="o:${shopInformationBean}">
-            <div class="product_img_div">
-                <img src="/img/home/feature_prodects/cont2.jpg" th:src="${o.getImage()}" class="show_img"/>
+        <div class="detail_product" th:each="o:${shopInformationBean}">
+            <div class="product_img_container">
+                <img class="product_img" th:src="${o.image}" alt="商品图片"/>
             </div>
-            <p class="show_tip" th:text="${o.remark}"></p>
-            <span class="detail_product_name" th:text="${o.getName()}" th:value="${o.id}">Big block Lether Bag</span><br/>
-            <span class="detail_product_cost" th:text="'￥'+${o.getPrice()}">$350.00</span><br/>
-            <span class="detail_type" th:text="${o.getSort()}">数码科技-手机-苹果</span>
-            <div class="delete_and_update"><img src="/img/pencil.jpg" class="update_publish" th:value="${o.getId()}"/>
-                <img src="/img/delete_icon.jpg" class="delete_publish" th:value="${o.getId()}"/></div>
-        </figure>
+            <div class="product_info">
+                <div class="detail_product_name" th:value="${o.id}" th:text="${o.name}">商品名</div>
+                <div class="detail_product_cost" th:text="'￥'+${o.price}">商品价格</div>
+                <div class="detail_product_level" th:text="${o.level}+'成新'">商品成色</div>
+                <div class="detail_product_quantity" th:text="'数量：'+${o.quantity}">商品数量</div>
+                <div class="detail_product_sort" th:text="${o.sort}">商品分类</div>
+                <div class="detail_product_remark" th:text="${o.remark}">商品详情</div>
+            </div>
+            <div class="delete_and_update">
+                <img src="/img/pencil.jpg" class="update_publish" th:value="${o.id}" title="编辑"/>
+                <img src="/img/delete_icon.jpg" class="delete_publish" th:value="${o.id}" title="删除"/>
+            </div>
+        </div>
     </div>
     <div class="pagination_div">
         <a class="pagination_lt">&lt;</a>
@@ -68,7 +254,7 @@
         <a class="pagination_gt">&gt;</a>
     </div>
     <footer>
-        <p>Copyright © 2025.Company name All rights reserved.<a href="/"></a></p>
+        <p>Copyright © 2025.Company name All rights reserved.</p>
     </footer>
 </div>
 </body>

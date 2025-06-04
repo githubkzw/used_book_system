@@ -14,10 +14,9 @@
                 window.location.href='/modified_require_product.do?id='+id;
             });
             $('.delete_publish').click(function () {
-                var r = confirm("确定删除？？？？")
+                var r = confirm("确定删除？")
                 if (r == true) {
                     var id = $(this).attr('value');
-//                    alert(id);
                     window.location.href="/deleteUserWant.do?id="+id;
                 }
             });
@@ -55,31 +54,35 @@
 
         .require_one_part .what_info {
             font-size: 1.2em;
+            color: #666;
         }
 
         .require_content_div .require_one_part .delete_and_update {
             width: 100%;
-            display: none;
-            padding-bottom: 0%;
+            padding: 10px 0;
             position: relative;
-            text-align: inherit;
+            text-align: center;
+            border-top: 1px solid #eee;
+            margin-top: 10px;
         }
 
         .require_content_div .require_one_part .delete_and_update img.update_publish {
-            width: 8%;
-            padding-bottom: 0;
-            position: relative;
-            margin-right: 30%;
+            width: 24px;
+            padding: 5px;
+            margin-right: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
 
         .require_content_div .require_one_part .delete_and_update img.delete_publish {
-            width: 8%;
-            padding-bottom: 0;
-            margin-left: 43%;
+            width: 24px;
+            padding: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
 
         .require_content_div .require_one_part .delete_and_update img:hover {
-            cursor: pointer;
+            transform: scale(1.1);
         }
 
         div.pagination_div {
@@ -125,6 +128,7 @@
         .pagination_div .pagination_gt:hover {
             cursor: pointer;
             background-color: slateblue;
+            color: white;
         }
 
         footer {
@@ -158,14 +162,15 @@
             <span class="what_info">数量：</span>
             <span class="info_content" th:text="${o.quantity}">3</span><br/>
             <span class="what_info">单价：</span>
-            <span class="info_content" th:text="${o.price}">20.00</span><br/>
+            <span class="info_content" th:text="'￥'+${o.price}">20.00</span><br/>
             <span class="what_info">详情：</span>
             <span class="info_content" th:text="${o.remark}">这是一个商品，联系电话1111111111</span><br/>
             <span class="what_info">分类：</span>
             <span class="info_content" th:text="${o.sort}">数码科技-手机-苹果</span><br/>
             <div class="delete_and_update">
-                <img src="/img/pencil.jpg" class="update_publish" th:value="${o.id}"/>
-                <img src="/img/delete_icon.jpg" class="delete_publish" th:value="${o.id}"/></div>
+                <img src="/img/pencil.jpg" class="update_publish" th:value="${o.id}" title="编辑"/>
+                <img src="/img/delete_icon.jpg" class="delete_publish" th:value="${o.id}" title="删除"/>
+            </div>
         </div>
     </div>
     <div class="pagination_div">
@@ -173,8 +178,8 @@
         <ul>
             <li><a>1</a></li>
             <li><a>2</a></li>
-            <li><a>4</a></li>
             <li><a>3</a></li>
+            <li><a>4</a></li>
             <li><a>5</a></li>
         </ul>
         <a class="pagination_gt">&gt;</a>

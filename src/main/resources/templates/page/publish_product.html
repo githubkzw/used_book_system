@@ -124,7 +124,7 @@
                     <h3>图片</h3>
                 </div>
                 <div class="img_content">
-                    <input class="upload_img_input" type="file" name="image" required="required"/>
+                    <input class="upload_img_input" type="file" name="image" th:required="${shopInformation.id == null}"/>
                 </div>
                 <img src="" class="show_choose_img" id="show_choose_img"/>
                 <img src="" class="show_choose_img" th:if="${shopInformation.image}!=null"

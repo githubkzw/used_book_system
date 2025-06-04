@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -1258,5 +1259,63 @@ public class UserController {
         }
         System.out.println("success");
         return "page/publish_product";
+    }
+
+    //更新求购信息
+    @RequestMapping(value = "/updateUserWant.do", method = RequestMethod.POST)
+    public String updateUserWant(HttpServletRequest request, Model model,
+                               @RequestParam int id,
+                               @RequestParam String name,
+                               @RequestParam int sort,
+                               @RequestParam int quantity,
+                               @RequestParam double price,
+                               @RequestParam String remark,
+                               @RequestParam String token) {
+        // 检查用户是否登录
+        UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
+        if (StringUtils.getInstance().isNullOrEmpty(userInformation)) {
+            return "redirect:/login.do";
+        }
+
+        // 验证token
+        String publishUserWantToken = (String) request.getSession().getAttribute("publishUserWantToken");
+        if (StringUtils.getInstance().isNullOrEmpty(publishUserWantToken) || !publishUserWantToken.equals(token)) {
+            return "redirect:require_product.do?error=3";
+        } else {
+            request.getSession().removeAttribute("publishUserWantToken");
+        }
+
+        // 验证输入
+        try {
+            if (name.length() < 1 || remark.length() < 1 || name.length() > 25 || remark.length() > 25) {
+                return "redirect:require_product.do";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:require_product.do?error=1";
+        }
+
+        // 更新求购信息
+        UserWant userWant = new UserWant();
+        userWant.setId(id);
+        userWant.setModified(new Date());
+        userWant.setName(name);
+        userWant.setPrice(new BigDecimal(price));
+        userWant.setQuantity(quantity);
+        userWant.setRemark(remark);
+        userWant.setSort(sort);
+        userWant.setDisplay(1);
+
+        try {
+            int result = userWantService.updateByPrimaryKeySelective(userWant);
+            if (result != 1) {
+                return "redirect:/require_product.do?error=2";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/require_product.do?error=2";
+        }
+
+        return "redirect:/my_require_product.do";
     }
 }

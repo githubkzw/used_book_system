@@ -19,15 +19,15 @@
 <!--name,sort,quantity,price,remark,token,-->
 <div class="top_content">
     <div class="publish_product_div">
-        <form action="/publishUserWant.do" method="post">
+        <form action="/updateUserWant.do" method="post" onsubmit="return validateForm()">
             <input type="hidden" th:value="${token}" name="token"/>
+            <input type="hidden" th:value="${userWant.id}" name="id"/>
             <div class="publish_one_par">
                 <div class="publish_title">
                     <h3>商品名</h3>
                 </div>
                 <div class="publish_content">
-                    <input type="text" class="title_input" name="name" required="required" th:value="${userWant.name}"
-                           />
+                    <input type="text" class="title_input" name="name" required="required" th:value="${userWant.name}"/>
                 </div>
             </div>
             <div class="publish_one_par">
@@ -35,8 +35,7 @@
                     <h3>数量</h3>
                 </div>
                 <div class="publish_content">
-                    <input type="text" class="count_input" name="quantity" required="required"
-                           th:value="${userWant.quantity}" />
+                    <input type="number" class="count_input" name="quantity" required="required" min="1" th:value="${userWant.quantity}"/>
                 </div>
             </div>
             <div class="publish_one_par">
@@ -44,8 +43,7 @@
                     <h3>单价</h3>
                 </div>
                 <div class="publish_content cost_content">
-                    <input type="text" class="cost_input" name="price" required="required" th:value="${userWant.price}"
-                           />
+                    <input type="number" class="cost_input" name="price" required="required" min="0" step="0.01" th:value="${userWant.price}"/>
                     <span>RMB(.00)</span>
                 </div>
             </div>
@@ -54,9 +52,8 @@
                     <h3>详情</h3>
                 </div>
                 <div class="publish_content">
-                    <textarea class="detail_textarea" maxlength="122"
-                              placeholder="留下联系方式,方便卖家联系" name="remark" required="required"
-                              th:value="${userWant.remark}" th:text="${userWant.remark}"></textarea>
+                    <textarea class="detail_textarea" maxlength="122" placeholder="留下联系方式,方便卖家联系" 
+                              name="remark" required="required" th:text="${userWant.remark}"></textarea>
                 </div>
             </div>
             <div class="publish_one_par">
@@ -65,36 +62,18 @@
                 </div>
                 <div class="publish_content">
                     <select class="choose_first_type">
-                        <option id="type_1" selected="selected">数码科技</option>
-                        <option id="type_2">影音家电</option>
-                        <option id="type_3">鞋服配饰</option>
-                        <option id="type_4">运动代步</option>
-                        <option id="type_5">书籍文具</option>
-                        <option id="type_6">其他</option>
-                    </select><span class="to_left">--</span>
+                        <option id="type_1" selected="selected">文学与艺术类</option>
+                        <option id="type_2">科学与技术类</option>
+                        <option id="type_3">人文社科类</option>
+                        <option id="type_4">经济与管理类</option>
+                        <option id="type_5">生活与休闲类</option>
+                        <option id="type_6">教育与学习类</option>
+                    </select>
                     <select class="choose_second_type">
-                        <option>三成</option>
-                        <option>四成</option>
-                        <option>五成</option>
-                        <option>六成</option>
-                        <option>七成</option>
-                        <option>八成</option>
-                        <option>九成</option>
-                        <option>全新</option>
-                    </select><span class="to_left">--</span>
-                    <select class="choose_third_type" name="sort">
-                        <option>三成</option>
-                        <option>四成</option>
-                        <option>五成</option>
-                        <option>六成</option>
-                        <option>七成</option>
-                        <option>八成</option>
-                        <option>九成</option>
-                        <option>全新</option>
+                    </select>
+                    <select class="choose_third_type" name="sort" required="required">
                     </select>
                 </div>
-                <br/>
-                <!--<div th:value="${sort}" th:text="${sort}"></div>-->
             </div>
             <div class="submit_content_div">
                 <input type="submit" value="提交" class="submit_input"/>
@@ -105,5 +84,33 @@
         <p>Copyright © 2025.Company name All rights reserved.<a href="/"></a></p>
     </footer>
 </div>
+<script>
+function validateForm() {
+    var sort = document.querySelector('.choose_third_type').value;
+    if (!sort) {
+        alert('请选择完整的分类信息');
+        return false;
+    }
+    return true;
+}
+
+// 初始化当前商品的分类
+$(document).ready(function() {
+    // 获取当前商品的分类ID
+    var currentSort = '[[${userWant.sort}]]';
+    
+    // 触发第一级分类的change事件来加载二级分类
+    $('.choose_first_type').trigger('change');
+    
+    // 在二级和三级分类加载完成后，选中对应的值
+    var checkInterval = setInterval(function() {
+        var thirdSelect = $('.choose_third_type');
+        if (thirdSelect.children().length > 0) {
+            thirdSelect.val(currentSort);
+            clearInterval(checkInterval);
+        }
+    }, 100);
+});
+</script>
 </body>
 </html>
