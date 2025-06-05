@@ -1,6 +1,7 @@
 package com.wsk.dao;
 
 import com.wsk.pojo.UserWant;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -29,4 +30,10 @@ public interface UserWantMapper {
 
     @Select("select * from userwant where sort=#{sort} and display=1 order by id desc")
     List<UserWant> selectBySort(int sort);
+
+    @Select("select * from userwant where display=1 order by id desc limit #{start}, #{size}")
+    List<UserWant> selectByPage(@Param("start") int start, @Param("size") int size);
+
+    @Select("select count(*) from userwant where display=1")
+    int getWantCounts();
 }

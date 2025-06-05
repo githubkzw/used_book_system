@@ -308,3 +308,22 @@ footer p {
     cursor: auto;
     max-width: 94%;
 }
+
+.pagination_div .disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.pagination_div a {
+    cursor: pointer;
+}
+
+.pagination_div li {
+    cursor: pointer;
+}
+
+.pagination_div li.current_page {
+    background-color: #6c5ce7;
+    color: white;
+}

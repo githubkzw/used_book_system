@@ -116,4 +116,186 @@ $(function () {
     function hideParticular() {
         $('.particular_type_div').removeClass('show').hide();
     }
+
+    // 初始化变量
+    var currentPage = 1;
+    var itemsPerPage = 12;
+    var totalPages = 1;
+
+    // 加载求购数据
+    function loadWantProducts(page) {
+        $.ajax({
+            url: '/selectWantByCounts.do',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                counts: page
+            },
+            success: function(data) {
+                var container = $('.require_content_div');
+                container.empty();
+
+                if (!data || data.length === 0) {
+                    if (page > 1) {
+                        // 如果当前页没有数据，但不是第一页，回到上一页
+                        currentPage--;
+                        loadWantProducts(currentPage);
+                        return;
+                    }
+                    // 如果是第一页就没有数据，显示提示信息
+                    container.append(
+                        "<div class='require_one_part'>" +
+                        "<div class='what_info'><span>暂时没有更多求购信息</span></div>" +
+                        "</div>"
+                    );
+                    return;
+                }
+
+                updateWantProductDisplay(data);
+                // 重新获取总页数，确保分页状态正确
+                getTotalPages();
+            },
+            error: function(xhr, status, error) {
+                console.error('Failed to load want products:', error);
+                $('.require_content_div').html(
+                    "<div class='require_one_part'>" +
+                    "<div class='what_info'><span>加载数据时出错</span></div>" +
+                    "</div>"
+                );
+            }
+        });
+    }
+
+    // 更新求购商品显示
+    function updateWantProductDisplay(products) {
+        var container = $('.require_content_div');
+        container.empty();
+
+        products.forEach(function(product) {
+            var productHtml = `
+                <div class="require_one_part" id="${product.id}">
+                    <div class="what_info">
+                        <span>求购：</span>
+                        <span>${product.name}</span>
+                    </div>
+                    <div class="all_info">
+                        <span>详情：</span>
+                        <span>${product.remark}</span>
+                    </div>
+                    <div class="what_info">
+                        <span>数量：</span>
+                        <span>${product.quantity}</span>
+                    </div>
+                    <div class="what_info">
+                        <span>价格：</span>
+                        <span>￥${product.price}元</span>
+                    </div>
+                </div>
+            `;
+            container.append(productHtml);
+        });
+    }
+
+    // 更新分页UI
+    function updatePagination(currentPage, totalPages) {
+        var paginationUl = $('.pagination_div ul');
+        paginationUl.empty();
+
+        if (totalPages < 1) {
+            $('.pagination_div').hide();
+            return;
+        }
+
+        $('.pagination_div').show();
+
+        // 计算显示的页码范围
+        var startPage = Math.max(1, currentPage - 2);
+        var endPage = Math.min(totalPages, startPage + 4);
+        
+        // 调整startPage确保始终显示5个页码（如果有足够的页数）
+        if (endPage - startPage < 4 && totalPages > 5) {
+            startPage = Math.max(1, endPage - 4);
+        }
+
+        // 添加页码
+        for (var i = startPage; i <= endPage; i++) {
+            var li = $('<li><a>' + i + '</a></li>');
+            if (i === currentPage) {
+                li.addClass('current_page');
+            }
+            paginationUl.append(li);
+        }
+
+        // 更新上一页/下一页按钮状态
+        if (currentPage === 1) {
+            $('.pagination_lt').addClass('disabled');
+        } else {
+            $('.pagination_lt').removeClass('disabled');
+        }
+
+        if (currentPage === totalPages) {
+            $('.pagination_gt').addClass('disabled');
+        } else {
+            $('.pagination_gt').removeClass('disabled');
+        }
+    }
+
+    // 获取总页数
+    function getTotalPages() {
+        $.ajax({
+            url: '/getWantCounts.do',
+            type: 'GET',
+            dataType: 'JSON',
+            success: function(data) {
+                if (data && typeof data.counts === 'number') {
+                    totalPages = Math.max(1, Math.ceil(data.counts / itemsPerPage));
+                    updatePagination(currentPage, totalPages);
+                } else {
+                    console.error('Invalid counts data:', data);
+                    totalPages = 1;
+                    updatePagination(currentPage, totalPages);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Failed to get total pages:', error);
+                totalPages = 1;
+                updatePagination(currentPage, totalPages);
+            }
+        });
+    }
+
+    // 初始化页面
+    getTotalPages();
+    loadWantProducts(currentPage);
+
+    // 点击页码
+    $('.pagination_div ul').on('click', 'li', function() {
+        if ($(this).hasClass('current_page')) {
+            return;
+        }
+        var clickedPage = parseInt($(this).text());
+        if (clickedPage !== currentPage && clickedPage <= totalPages) {
+            currentPage = clickedPage;
+            loadWantProducts(currentPage);
+            updatePagination(currentPage, totalPages);
+        }
+    });
+
+    // 上一页
+    $('.pagination_lt').click(function() {
+        if (currentPage > 1) {
+            currentPage--;
+            loadWantProducts(currentPage);
+            updatePagination(currentPage, totalPages);
+        }
+    });
+
+    // 下一页
+    $('.pagination_gt').click(function() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            loadWantProducts(currentPage);
+            updatePagination(currentPage, totalPages);
+        }
+    });
 }); 

@@ -70,4 +70,14 @@ public class UserWantServiceImpl implements UserWantService {
     public List<UserWant> selectBySort(int sort) {
         return userWantMapper.selectBySort(sort);
     }
+
+    @Override
+    public List<UserWant> selectByPage(int start, int size) {
+        return userWantMapper.selectByPage(start, size);
+    }
+
+    @Override
+    public int getWantCounts() {
+        return userWantMapper.getWantCounts();
+    }
 }

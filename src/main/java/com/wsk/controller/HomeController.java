@@ -62,7 +62,7 @@ public class HomeController {
                     sortName = "未分类";
                     System.out.println("Warning: Shop ID " + shopInformation.getId() + " has null sort value");
                 } else {
-                    sortName = getSortName(sort);
+                    sortName = getSort(sort);
                     if (sortName.equals("未知分类")) {
                         System.out.println("Warning: Shop ID " + shopInformation.getId() + " has invalid sort value: " + sort);
                     }
@@ -100,31 +100,24 @@ public class HomeController {
             model.addAttribute("userInformation", userInformation);
         }
         try {
+            // 获取第一页数据
             List<ShopInformation> shopInformations = selectTen(1, 12);
             List<ShopInformationBean> list = new ArrayList<>();
+            
+            // 获取总数
             int counts = getShopCounts();
             model.addAttribute("shopInformationCounts", counts);
-            String sortName;
+            
+            // 转换商品信息
             for (ShopInformation shopInformation : shopInformations) {
-                int sort = shopInformation.getSort();
-                sortName = getSortName(sort);
-                ShopInformationBean shopInformationBean = new ShopInformationBean();
-                shopInformationBean.setId(shopInformation.getId());
-                shopInformationBean.setName(shopInformation.getName());
-                shopInformationBean.setLevel(shopInformation.getLevel());
-                shopInformationBean.setRemark(shopInformation.getRemark());
-                shopInformationBean.setPrice(shopInformation.getPrice().doubleValue());
-                shopInformationBean.setSort(sortName);
-                shopInformationBean.setQuantity(shopInformation.getQuantity());
-                shopInformationBean.setTransaction(shopInformation.getTransaction());
-                shopInformationBean.setUid(shopInformation.getUid());
-                shopInformationBean.setImage(shopInformation.getImage());
-                list.add(shopInformationBean);
+                ShopInformationBean bean = convertToBean(shopInformation);
+                list.add(bean);
             }
             model.addAttribute("shopInformationBean", list);
+            
         } catch (Exception e) {
             e.printStackTrace();
-            return "page/login_page";
+            return "redirect:/login.do";
         }
         return "page/mall_page";
     }
@@ -228,58 +221,48 @@ public class HomeController {
     //get the shops counts
     @RequestMapping(value = "/getShopsCounts.do")
     @ResponseBody
-    public Map getShopsCounts() {
+    public Map<String, Integer> getShopsCounts() {
         Map<String, Integer> map = new HashMap<>();
-        int counts = 0;
         try {
-            counts = shopInformationService.getCounts();
+            int counts = shopInformationService.getCounts();
+            map.put("counts", counts);
         } catch (Exception e) {
             e.printStackTrace();
-            map.put("counts", counts);
-            return map;
+            map.put("counts", 0);
         }
-        map.put("counts", counts);
         return map;
     }
 
     @RequestMapping(value = "/getShops.do")
     @ResponseBody
-    public List getShops(@RequestParam int start) {
-        List<ShopInformation> list = new ArrayList<>();
+    public List<ShopInformationBean> getShops(@RequestParam int start) {
+        List<ShopInformationBean> list = new ArrayList<>();
         try {
-            int end = 12;
-            list = selectTen(start, end);
+            List<ShopInformation> shops = selectTen(start, 12);
+            for (ShopInformation shop : shops) {
+                ShopInformationBean bean = convertToBean(shop);
+                list.add(bean);
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return list;
         }
         return list;
     }
 
-
-    //获取商品，分页,一次性获取end个
-    private List<ShopInformation> selectTen(int start, int end) {
-        try {
-            Map<String, Integer> map = new HashMap<>();
-            map.put("start", (start - 1) * end);
-            map.put("end", end);
-            List<ShopInformation> list = shopInformationService.selectTen(map);
-            
-            // 打印调试信息
-            if (list != null) {
-                for (ShopInformation shop : list) {
-                    System.out.println("Debug - Shop ID: " + shop.getId() + 
-                                     ", Name: " + shop.getName() + 
-                                     ", Sort: " + shop.getSort());
-                }
-            }
-            
-            return list != null ? list : new ArrayList<>();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error in selectTen: " + e.getMessage());
-            return new ArrayList<>();
-        }
+    // 转换ShopInformation到ShopInformationBean
+    private ShopInformationBean convertToBean(ShopInformation shop) {
+        ShopInformationBean bean = new ShopInformationBean();
+        bean.setId(shop.getId());
+        bean.setName(shop.getName());
+        bean.setLevel(shop.getLevel());
+        bean.setPrice(shop.getPrice().doubleValue());
+        bean.setRemark(shop.getRemark());
+        bean.setSort(getSort(shop.getSort()));
+        bean.setQuantity(shop.getQuantity());
+        bean.setTransaction(shop.getTransaction());
+        bean.setUid(shop.getUid());
+        bean.setImage(shop.getImage());
+        return bean;
     }
 
     //获取最详细的分类，第三层
@@ -363,5 +346,71 @@ public class HomeController {
         }
         model.addAttribute("userInformation", userInformation);
         return "page/product_intro";
+    }
+
+    // 获取商品，分页,一次性获取end个
+    private List<ShopInformation> selectTen(int start, int end) {
+        try {
+            Map<String, Integer> map = new HashMap<>();
+            map.put("start", (start - 1) * end);
+            map.put("end", end);
+            List<ShopInformation> list = shopInformationService.selectTen(map);
+            return list != null ? list : new ArrayList<>();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    // 获取商品分类名称
+    private String getSort(Integer sort) {
+        if (sort == null) {
+            return "未知分类";
+        }
+        try {
+            StringBuilder sb = new StringBuilder();
+            
+            // 获取第三层分类
+            Specific specific = selectSpecificBySort(sort);
+            if (specific == null) {
+                return "未知分类";
+            }
+            
+            // 获取第二层分类
+            Classification classification = selectClassificationByCid(specific.getCid());
+            if (classification == null) {
+                return "未知分类";
+            }
+            
+            // 获取第一层分类
+            AllKinds allKinds = selectAllKindsByAid(classification.getAid());
+            if (allKinds == null) {
+                return "未知分类";
+            }
+            
+            // 拼接分类名称
+            if (allKinds.getName() != null) {
+                sb.append(allKinds.getName());
+            }
+            
+            if (classification.getName() != null) {
+                if (sb.length() > 0) {
+                    sb.append("-");
+                }
+                sb.append(classification.getName());
+            }
+            
+            if (specific.getName() != null) {
+                if (sb.length() > 0) {
+                    sb.append("-");
+                }
+                sb.append(specific.getName());
+            }
+            
+            return sb.length() > 0 ? sb.toString() : "未知分类";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "未知分类";
+        }
     }
 }

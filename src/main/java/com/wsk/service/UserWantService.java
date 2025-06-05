@@ -29,4 +29,8 @@ public interface UserWantService {
     List<UserWant> selectAll();
 
     List<UserWant> selectBySort(int sort);
+
+    List<UserWant> selectByPage(int start, int size);
+
+    int getWantCounts();
 }

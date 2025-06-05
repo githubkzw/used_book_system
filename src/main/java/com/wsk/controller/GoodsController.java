@@ -202,11 +202,41 @@ public class GoodsController {
         map.put("end", 12);
         return shopInformationService.selectTen(map);
     }
-//    //通过id查看商品详情
-//    @RequestMapping(value = "/showShop")
-//    public String showShop(@RequestParam int id, HttpServletRequest request, Model model) {
-//        ShopInformation shopInformation =
-//    }
+
+    //分页查询求购信息
+    @RequestMapping(value = "/selectWantByCounts.do")
+    @ResponseBody
+    public List<UserWantBean> selectWantByCounts(@RequestParam int counts) {
+        List<UserWant> userWants = userWantService.selectByPage((counts - 1) * 12, 12);
+        List<UserWantBean> list = new ArrayList<>();
+        for (UserWant userWant : userWants) {
+            UserWantBean u = new UserWantBean();
+            u.setSort(getSort(userWant.getSort()));
+            u.setRemark(userWant.getRemark());
+            u.setQuantity(userWant.getQuantity());
+            u.setPrice(userWant.getPrice().doubleValue());
+            u.setUid(userWant.getUid());
+            u.setId(userWant.getId());
+            u.setModified(userWant.getModified());
+            u.setName(userWant.getName());
+            list.add(u);
+        }
+        return list;
+    }
+
+    @RequestMapping(value = "/getWantCounts.do")
+    @ResponseBody
+    public Map<String, Integer> getWantCounts() {
+        Map<String, Integer> map = new HashMap<>();
+        try {
+            int counts = userWantService.getWantCounts();
+            map.put("counts", counts);
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("counts", 0);
+        }
+        return map;
+    }
 
     //获取最详细的分类，第三层
     private Specific selectSpecificBySort(int sort) {
