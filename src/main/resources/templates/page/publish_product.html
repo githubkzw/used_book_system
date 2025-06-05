@@ -139,5 +139,54 @@
         <p>Copyright © 2025.Company name All rights reserved.<a href="/"></a></p>
     </footer>
 </div>
+<script>
+// 初始化当前商品的分类
+$(document).ready(function() {
+    // 获取当前商品的分类ID
+    var currentSort = '[[${shopInformation.sort}]]';
+    
+    if (currentSort && currentSort !== 'null') {
+        // 先通过AJAX获取当前分类的完整信息
+        $.ajax({
+            url: '/getFullCategoryInfo.do',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {sort: currentSort},
+            success: function(result) {
+                if (result) {
+                    // 设置一级分类
+                    $('.choose_first_type option').each(function() {
+                        if ($(this).attr('id') === 'type_' + result.aid) {
+                            $(this).prop('selected', true);
+                        }
+                    });
+                    
+                    // 触发一级分类change事件来加载二级分类
+                    $('.choose_first_type').trigger('change');
+                    
+                    // 等待二级分类加载完成后设置选中值
+                    var secondInterval = setInterval(function() {
+                        var secondSelect = $('.choose_second_type');
+                        if (secondSelect.children().length > 0) {
+                            secondSelect.val(result.cid);
+                            secondSelect.trigger('change');
+                            clearInterval(secondInterval);
+                            
+                            // 等待三级分类加载完成后设置选中值
+                            var thirdInterval = setInterval(function() {
+                                var thirdSelect = $('.choose_third_type');
+                                if (thirdSelect.children().length > 0) {
+                                    thirdSelect.val(currentSort);
+                                    clearInterval(thirdInterval);
+                                }
+                            }, 100);
+                        }
+                    }, 100);
+                }
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>

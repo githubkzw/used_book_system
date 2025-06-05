@@ -312,6 +312,33 @@ public class HomeController {
         return specificeService.selectByCid(cid);
     }
 
+    //获取完整的分类信息
+    @RequestMapping(value = "/getFullCategoryInfo.do", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Integer> getFullCategoryInfo(@RequestParam int sort) {
+        Map<String, Integer> result = new HashMap<>();
+        try {
+            // 获取三级分类
+            Specific specific = selectSpecificBySort(sort);
+            if (specific != null) {
+                // 获取二级分类
+                Classification classification = selectClassificationByCid(specific.getCid());
+                if (classification != null) {
+                    // 获取一级分类
+                    AllKinds allKinds = selectAllKindsByAid(classification.getAid());
+                    if (allKinds != null) {
+                        result.put("aid", allKinds.getId());
+                        result.put("cid", classification.getId());
+                        result.put("sort", specific.getId());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     //获得商品总页数
     private int getShopCounts() {
         return shopInformationService.getCounts();
