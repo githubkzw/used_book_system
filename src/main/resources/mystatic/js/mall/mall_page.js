@@ -43,6 +43,43 @@ $(function() {
             `;
             container.append(productHtml);
         });
+
+        // 绑定加入购物车事件
+        $('.detail_buy').off('click').on('click', function() {
+            var id = $(this).attr('value');
+            $.ajax({
+                url: '/insertGoodsCar.do',
+                dataType: 'JSON',
+                type: 'post',
+                data: {id: id},
+                contentType: 'application/x-www-form-urlencoded',
+                success: function(response) {
+                    if (!response) {
+                        alert('发生了错误，请检测网络');
+                        return;
+                    }
+                    
+                    if (response.result === 2) {
+                        alert('您还未登录，请先登录！！！');
+                        window.location.href = '/login.do';
+                    } else if (response.result === 1) {
+                        alert('加入购物车成功');
+                    } else {
+                        alert('加入购物车失败');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                    alert('加入购物车失败，请检查网络连接');
+                }
+            });
+        });
+
+        // 绑定商品详情点击事件
+        $('.detail_product_name').off('click').on('click', function() {
+            var id = $(this).attr('value');
+            window.location.href = '/selectById.do?id=' + id;
+        });
     }
 
     // 更新分页UI

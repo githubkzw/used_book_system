@@ -617,7 +617,7 @@ public class UserController {
     public BaseResponse insertGoodsCar(HttpServletRequest request, @RequestParam int id) {
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
         if (StringUtils.getInstance().isNullOrEmpty(userInformation)) {
-            return BaseResponse.fail();
+            return BaseResponse.fail(2);
         }
         int uid = userInformation.getId();
         GoodsCar goodsCar = new GoodsCar();
@@ -627,6 +627,9 @@ public class UserController {
         goodsCar.setUid(uid);
         goodsCar.setSid(id);
         int result = goodsCarService.insertSelective(goodsCar);
+        if (result != 1) {
+            return BaseResponse.fail();
+        }
         return BaseResponse.success();
     }
 
