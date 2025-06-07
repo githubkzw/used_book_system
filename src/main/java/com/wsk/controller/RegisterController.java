@@ -75,6 +75,7 @@ public class RegisterController {
                 //注册成功
                 userInformation = userInformationService.selectByPrimaryKey(uid);
                 request.getSession().setAttribute("userInformation", userInformation);
+                request.getSession().setAttribute("uid", uid);
                 return BaseResponse.success();
             }
         }
