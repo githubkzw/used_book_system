@@ -31,7 +31,8 @@ public class TokenProccessor {
     /**
      * 生成Token
      * Token：Nv6RRuGEVvmGjB+jimI/gw==
-     *
+     * 实例方法，必须通过实例调用，但是类的构造方法为private，只能由类中方法调用，
+     * 而instance已经声明为类的静态变量，属于是饿汉式，即类加载即被创建
      * @return
      */
     public String makeToken() {  //checkException

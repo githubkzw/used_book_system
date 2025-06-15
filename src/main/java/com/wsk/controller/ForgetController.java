@@ -38,6 +38,7 @@ public class ForgetController {
             request.getSession().setAttribute("name", name);
         }
         request.getSession().setAttribute("phone", phone);
+        // token幂等校验
         String checkCodeToken = (String) request.getSession().getAttribute("token");
         if (StringUtils.getInstance().isNullOrEmpty(checkCodeToken) || !checkCodeToken.equals(token)) {
             map.put("result", 0);
